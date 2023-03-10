@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+import userManagement from './modules/userManagement'
 Vue.use(Router)
 
 /* Layout */
@@ -148,7 +149,14 @@ export const constantRoutes = [
       }
     ]
   },
-
+  {
+    path: '/superAdmin',
+    component: Layout,
+    redirect: '/superAdmin/userManagement',
+    children: [
+      userManagement
+    ]
+  },
   {
     path: 'external-link',
     component: Layout,
