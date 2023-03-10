@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import userManagement from './modules/userManagement'
+import testManagement from './modules/testManagement'
 Vue.use(Router)
 
 /* Layout */
@@ -165,6 +166,14 @@ export const constantRoutes = [
         path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
         meta: { title: 'External Link', icon: 'link' }
       }
+    ]
+  },
+
+  {
+    path: '/testManagement',
+    component: Layout,
+    children: [
+      testManagement
     ]
   },
 
