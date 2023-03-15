@@ -154,6 +154,11 @@ export const constantRoutes = [
     path: '/admin',
     component: Layout,
     redirect: '/admin/functionManagement/personnelManagement',
+    name: 'Admin',
+    meta: {
+      title: '管理员',
+      icon: 'nested'
+    },
     children: [
       functionManagement
     ]
@@ -162,6 +167,11 @@ export const constantRoutes = [
     path: '/superAdmin',
     component: Layout,
     redirect: '/superAdmin/userManagement',
+    name: 'SuperAdmin',
+    meta: {
+      title: '超级管理员',
+      icon: 'nested'
+    },
     children: [
       userManagement
     ]
