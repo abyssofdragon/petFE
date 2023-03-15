@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import userManagement from './modules/userManagement'
+import functionManagement from './modules/functionManagement'
 Vue.use(Router)
 
 /* Layout */
@@ -147,6 +148,14 @@ export const constantRoutes = [
         name: 'Menu2',
         meta: { title: 'menu2' }
       }
+    ]
+  },
+  {
+    path: '/admin',
+    component: Layout,
+    redirect: '/admin/functionManagement/personnelManagement',
+    children: [
+      functionManagement
     ]
   },
   {

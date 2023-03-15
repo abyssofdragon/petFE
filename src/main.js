@@ -1,5 +1,15 @@
 import Vue from 'vue'
 
+// 新增组件
+// https://vxetable.cn/v3/#/table/start/install
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/style.css'
+Vue.use(VXETable)
+// http://v4.iviewui.com/docs/guide/install
+import ViewUI from 'view-design'
+import 'view-design/dist/styles/iview.css'
+Vue.use(ViewUI)
+
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
 import ElementUI from 'element-ui'
