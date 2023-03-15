@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import userManagement from './modules/userManagement'
 import testManagement from './modules/testManagement'
 import test from './modules/test'
+import functionManagement from './modules/functionManagement'
 Vue.use(Router)
 
 /* Layout */
@@ -152,9 +153,27 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/admin',
+    component: Layout,
+    redirect: '/admin/functionManagement/personnelManagement',
+    name: 'Admin',
+    meta: {
+      title: '管理员',
+      icon: 'nested'
+    },
+    children: [
+      functionManagement
+    ]
+  },
+  {
     path: '/superAdmin',
     component: Layout,
     redirect: '/superAdmin/userManagement',
+    name: 'SuperAdmin',
+    meta: {
+      title: '超级管理员',
+      icon: 'nested'
+    },
     children: [
       userManagement
     ]
