@@ -36,11 +36,22 @@
         <el-table-column
           width="180">
           <el-button type="primary" icon="el-icon-edit" circle></el-button>
-          <el-button type="danger" icon="el-icon-delete" circle></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle v-on:click="problemDialog = true"></el-button>
         </el-table-column>
       </el-table>
       <el-button type="success">增加试题</el-button>
     </div>
+
+    <el-dialog
+      title="警告"
+      :visible.sync="problemDialog"
+      width="30%">
+      <span>是否确认删除试题?</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="problemDialog = false">取 消</el-button>
+        <el-button type="danger" @click="deleteProblem">确 认</el-button>
+      </span>
+    </el-dialog>
 
     <div style="margin: 20px" v-if="paperManagement">
       <el-table
@@ -126,6 +137,7 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
@@ -135,7 +147,8 @@ export default {
       problemList: [{ id: 0, topic: '这是第一个题目', answer: 'A', score: 2 }, { id: 1, topic: '这是第二个题目', answer: 'B', score: 4 }],
       paperList: [{ id: 0, title: '这是第一份试卷', score: 100, duration: '120分钟', description: '这是第一份试卷的描述' }, { id: 1, title: '这是第二份试卷', score: 120, duration: '150分钟', description: '这是第二份试卷的描述' }],
       examList: [{ id: 0, title: '这是第一个考试', time: '这是第一个考试的时间', examineeList: '张三、李四', description: '这是第一个考试的描述' },
-        { id: 1, title: '这是第二个考试', time: '这是第二个考试的时间', examineeList: '张三、李四', description: '这是第二个考试的描述' }]
+        { id: 1, title: '这是第二个考试', time: '这是第二个考试的时间', examineeList: '张三、李四', description: '这是第二个考试的描述' }],
+      problemDialog: false
     }
   },
   methods: {
@@ -153,6 +166,9 @@ export default {
       this.problemManagement = false
       this.paperManagement = false
       this.examManagement = true
+    },
+    deleteProblem(e) {
+      console.log(e)
     }
   }
 }

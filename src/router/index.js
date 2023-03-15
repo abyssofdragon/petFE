@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import userManagement from './modules/userManagement'
 import testManagement from './modules/testManagement'
+import test from './modules/test'
 Vue.use(Router)
 
 /* Layout */
@@ -174,6 +175,14 @@ export const constantRoutes = [
     component: Layout,
     children: [
       testManagement
+    ]
+  },
+
+  {
+    path: '/test',
+    component: Layout,
+    children: [
+      test
     ]
   },
 
