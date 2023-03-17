@@ -6,13 +6,18 @@
     <div>
       <el-card class="box-card" v-if="showCard">
         <div slot="header" class="clearfix">
-          <span style="font-size: larger">考试列表</span>
-          <el-input
-            class="input"
-            placeholder="请输入内容"
-            v-model="input"
-            clearable>
-          </el-input>
+          <span style="font-size: larger">病种列表</span>
+          <span style="float: right">
+            <el-input
+              class="input"
+              placeholder="请输入病种"
+              v-model="input"
+              clearable>
+            </el-input>
+            <el-button type="primary">
+              生成试卷
+            </el-button>
+          </span>
         </div>
         <el-table :data="examList" ref="table" @row-click="enterExam">
           <el-table-column
@@ -37,53 +42,57 @@
         </el-table>
       </el-card>
     </div>
-    <div v-if="showExam">
-      <p>第一个考试</p>
-      <el-form ref="form" :model="form" label-width="80px" style="border: solid black; width: 70%">
-        <el-form-item label="活动名称">
-          <el-input v-model="form.name"></el-input>
-        </el-form-item>
-        <el-form-item label="活动区域">
-          <el-select v-model="form.region" placeholder="请选择活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="活动时间">
-          <el-col :span="11">
-            <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
-          </el-col>
-          <el-col class="line" :span="2">-</el-col>
-          <el-col :span="11">
-            <el-time-picker placeholder="选择时间" v-model="form.date2" style="width: 100%;"></el-time-picker>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="即时配送">
-          <el-switch v-model="form.delivery"></el-switch>
-        </el-form-item>
-        <el-form-item label="活动性质">
-          <el-checkbox-group v-model="form.type">
-            <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-            <el-checkbox label="地推活动" name="type"></el-checkbox>
-            <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-            <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-          </el-checkbox-group>
-        </el-form-item>
-        <el-form-item label="特殊资源">
-          <el-radio-group v-model="form.resource">
-            <el-radio label="线上品牌商赞助"></el-radio>
-            <el-radio label="线下场地免费"></el-radio>
+    <el-card v-if="showExam" class="box-card">
+      <div slot="header" class="clearfix">
+        <span style="font-size: larger">第一个考试</span>
+        <el-button
+          type="primary"
+          style="float: right"
+          @click="select"
+        >返回</el-button>
+      </div>
+      <el-form ref="form" :model="form" label-width="80px">
+        <div v-for="o in 5" :key="o" style="margin: 50px">
+          <div>
+            {{o + '. ' + form.problem[o]}}
+          </div>
+          <el-radio-group v-model="form.resource[o]">
+            <el-radio v-bind:label="form.options[0]"></el-radio>
+            <el-radio v-bind:label="form.options[1]"></el-radio>
+            <el-radio v-bind:label="form.options[2]"></el-radio>
+            <el-radio v-bind:label="form.options[3]"></el-radio>
           </el-radio-group>
-        </el-form-item>
-        <el-form-item label="活动形式">
-          <el-input type="textarea" v-model="form.desc"></el-input>
-        </el-form-item>
+        </div>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">立即创建</el-button>
+          <el-button type="primary" @click="onSubmit">立即交卷</el-button>
           <el-button>取消</el-button>
         </el-form-item>
       </el-form>
-    </div>
+    </el-card>
+
+    <el-card v-if="showResult" class="box-card">
+      <div slot="header" class="clearfix">
+        <span style="font-size: larger">考试结果</span>
+        <div class="score">{{'考试成绩: ' + score}}</div>
+      </div>
+      <el-form ref="form" :model="form" label-width="80px">
+        <div v-for="o in 5" :key="o" style="margin: 50px">
+          <div>
+            {{o + '. ' + form.problem[o]}}
+          </div>
+          <el-radio-group v-model="form.resource[o]">
+            <el-radio v-bind:label="form.options[0]"></el-radio>
+            <el-radio v-bind:label="form.options[1]"></el-radio>
+            <el-radio v-bind:label="form.options[2]"></el-radio>
+            <el-radio v-bind:label="form.options[3]"></el-radio>
+          </el-radio-group>
+        </div>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit">立即交卷</el-button>
+          <el-button>取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
   </div>
 </template>
 
@@ -96,6 +105,8 @@ export default {
       input: '',
       showCard: true,
       showExam: false,
+      showResult: false,
+      score: '99',
       form: {
         name: '',
         region: '',
@@ -103,7 +114,9 @@ export default {
         date2: '',
         delivery: false,
         type: [],
-        resource: '',
+        options: ['A.选项a', 'B.选项b', 'C.选项c', 'D.选项d'],
+        problem: ['', '第一题', '甲', '乙', '丙', '丁'],
+        resource: ['', 'B.选项b', 'A.选项a', 'D.选项d', '', ''],
         desc: ''
       }
     }
@@ -113,6 +126,14 @@ export default {
       console.log(e.index)
       this.showCard = false
       this.showExam = true
+    },
+    select() {
+      this.showCard = true
+      this.showExam = false
+    },
+    onSubmit() {
+      this.showExam = false
+      this.showResult = true
     }
   }
 }
@@ -131,6 +152,11 @@ export default {
 
 .input{
   width: 200px;
+}
+
+.score{
   float: right;
+  font-size: large;
+  color: red;
 }
 </style>
