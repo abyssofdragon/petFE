@@ -104,6 +104,7 @@ export default {
         totalResult: 0
       },
       list: [],
+      display:[],
       filterName1: '',
       submitLoading: false,
       tableData: [
@@ -199,8 +200,8 @@ export default {
         this.list = this.tableData
       }
       this.loading = false
-      this.tablePage.totalResult = list.length
-      this.list = list.slice((this.tablePage.currentPage - 1) * this.tablePage.pageSize, this.tablePage.currentPage * this.tablePage.pageSize)
+      this.tablePage.totalResult = this.list.length
+      this.list = this.list.slice((this.tablePage.currentPage - 1) * this.tablePage.pageSize, this.tablePage.currentPage * this.tablePage.pageSize)
     },
     handlePageChange({ currentPage, pageSize }) {
       this.tablePage.currentPage = currentPage
