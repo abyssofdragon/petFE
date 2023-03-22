@@ -3,50 +3,29 @@
     <div class="title">
       测试
     </div>
-    <div>
-      <el-card v-if="showCard" class="box-card">
-        <div slot="header" class="clearfix">
-          <span style="font-size: larger">病种列表</span>
-          <span style="float: right">
-            <el-input
-              v-model="input"
-              class="input"
-              placeholder="请输入病种"
-              clearable
-            />
-            <el-button type="primary">
-              生成试卷
-            </el-button>
-          </span>
-        </div>
 
-        <span v-for="o in type" :key="o">
-          <el-tag style="margin-left: 100px" @click="enterExam">{{ o }}</el-tag>
+    <el-card v-if="showCard" class="box-card">
+      <div slot="header" class="clearfix">
+        <span style="font-size: larger">病种列表</span>
+        <span style="float: right">
+          <el-input
+            v-model="input"
+            class="input"
+            placeholder="请输入病种"
+            clearable
+          />
+          <el-button type="primary">
+            生成试卷
+          </el-button>
         </span>
-        <el-table ref="table" :data="examList" @row-click="enterExam">
-          <el-table-column
-            type="index"
-            width="50"
-          />
-          <el-table-column
-            prop="name"
-            label="考试名称"
-            width="180"
-          />
-          <el-table-column
-            prop="time"
-            label="考试时间"
-            width="180"
-          />
-          <el-table-column
-            prop="description"
-            label="考试描述"
-            width="180"
-          />
-        </el-table>
+      </div>
 
-      </el-card>
-    </div>
+      <span v-for="o in type" :key="o">
+        <el-tag style="margin-left: 100px" @click="enterExam">{{ o }}</el-tag>
+      </span>
+
+    </el-card>
+
     <el-card v-if="showExam" class="box-card">
       <div slot="header" class="clearfix">
         <span style="font-size: larger">第一个考试</span>
@@ -105,8 +84,6 @@
 export default {
   data() {
     return {
-      examList: [{ index: 1, name: '第一个考试', time: '考试时间', description: '这是第一个考试的描述' },
-        { index: 2, name: '第二个考试', time: '考试时间', description: '这是第二个考试的描述' }],
       input: '',
       showCard: true,
       showExam: false,
