@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import userManagement from './modules/userManagement'
 import testManagement from './modules/testManagement'
 import test from './modules/test'
+import caseManagement from './modules/caseManagement'
 import functionManagement from './modules/functionManagement'
 Vue.use(Router)
 
@@ -202,6 +203,14 @@ export const constantRoutes = [
     component: Layout,
     children: [
       test
+    ]
+  },
+
+  {
+    path: '/caseManagement',
+    component: Layout,
+    children: [
+      caseManagement
     ]
   },
 

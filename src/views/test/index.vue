@@ -19,27 +19,30 @@
             </el-button>
           </span>
         </div>
-        <el-table :data="examList" ref="table" @row-click="enterExam">
-          <el-table-column
-            type="index"
-            width="50">
-          </el-table-column>
-          <el-table-column
-            prop="name"
-            label="考试名称"
-            width="180"
-          />
-          <el-table-column
-            prop="time"
-            label="考试时间"
-            width="180"
-          />
-          <el-table-column
-            prop="description"
-            label="考试描述"
-            width="180"
-          />
-        </el-table>
+        <span v-for="o in type" :key="o">
+          <el-tag style="margin-left: 100px" @click="enterExam">{{ o }}</el-tag>
+        </span>
+<!--        <el-table :data="examList" ref="table" @row-click="enterExam">-->
+<!--          <el-table-column-->
+<!--            type="index"-->
+<!--            width="50">-->
+<!--          </el-table-column>-->
+<!--          <el-table-column-->
+<!--            prop="name"-->
+<!--            label="考试名称"-->
+<!--            width="180"-->
+<!--          />-->
+<!--          <el-table-column-->
+<!--            prop="time"-->
+<!--            label="考试时间"-->
+<!--            width="180"-->
+<!--          />-->
+<!--          <el-table-column-->
+<!--            prop="description"-->
+<!--            label="考试描述"-->
+<!--            width="180"-->
+<!--          />-->
+<!--        </el-table>-->
       </el-card>
     </div>
     <el-card v-if="showExam" class="box-card">
@@ -89,7 +92,7 @@
         </div>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">立即交卷</el-button>
-          <el-button>取消</el-button>
+          <el-button @click="select">取消</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -107,6 +110,7 @@ export default {
       showExam: false,
       showResult: false,
       score: '99',
+      type: ['犬瘟热', '犬细小病毒', '犬传染性肝炎', '犬冠状病毒', '猫泛白细胞减少症', '猫病毒性病气管炎', '皮肤真菌感染'],
       form: {
         name: '',
         region: '',
@@ -125,13 +129,16 @@ export default {
     enterExam(e) {
       console.log(e.index)
       this.showCard = false
+      this.showResult = false
       this.showExam = true
     },
     select() {
+      this.showResult = false
       this.showCard = true
       this.showExam = false
     },
     onSubmit() {
+      this.showCard = false
       this.showExam = false
       this.showResult = true
     }
