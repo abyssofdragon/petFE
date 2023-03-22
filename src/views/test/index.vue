@@ -4,26 +4,26 @@
       测试
     </div>
     <div>
-      <el-card class="box-card" v-if="showCard">
+      <el-card v-if="showCard" class="box-card">
         <div slot="header" class="clearfix">
           <span style="font-size: larger">病种列表</span>
           <span style="float: right">
             <el-input
+              v-model="input"
               class="input"
               placeholder="请输入病种"
-              v-model="input"
-              clearable>
-            </el-input>
+              clearable
+            />
             <el-button type="primary">
               生成试卷
             </el-button>
           </span>
         </div>
-        <el-table :data="examList" ref="table" @row-click="enterExam">
+        <el-table ref="table" :data="examList" @row-click="enterExam">
           <el-table-column
             type="index"
-            width="50">
-          </el-table-column>
+            width="50"
+          />
           <el-table-column
             prop="name"
             label="考试名称"
@@ -54,13 +54,13 @@
       <el-form ref="form" :model="form" label-width="80px">
         <div v-for="o in 5" :key="o" style="margin: 50px">
           <div>
-            {{o + '. ' + form.problem[o]}}
+            {{ o + '. ' + form.problem[o] }}
           </div>
           <el-radio-group v-model="form.resource[o]">
-            <el-radio v-bind:label="form.options[0]"></el-radio>
-            <el-radio v-bind:label="form.options[1]"></el-radio>
-            <el-radio v-bind:label="form.options[2]"></el-radio>
-            <el-radio v-bind:label="form.options[3]"></el-radio>
+            <el-radio :label="form.options[0]" />
+            <el-radio :label="form.options[1]" />
+            <el-radio :label="form.options[2]" />
+            <el-radio :label="form.options[3]" />
           </el-radio-group>
         </div>
         <el-form-item>
@@ -73,18 +73,18 @@
     <el-card v-if="showResult" class="box-card">
       <div slot="header" class="clearfix">
         <span style="font-size: larger">考试结果</span>
-        <div class="score">{{'考试成绩: ' + score}}</div>
+        <div class="score">{{ '考试成绩: ' + score }}</div>
       </div>
       <el-form ref="form" :model="form" label-width="80px">
         <div v-for="o in 5" :key="o" style="margin: 50px">
           <div>
-            {{o + '. ' + form.problem[o]}}
+            {{ o + '. ' + form.problem[o] }}
           </div>
           <el-radio-group v-model="form.resource[o]">
-            <el-radio v-bind:label="form.options[0]"></el-radio>
-            <el-radio v-bind:label="form.options[1]"></el-radio>
-            <el-radio v-bind:label="form.options[2]"></el-radio>
-            <el-radio v-bind:label="form.options[3]"></el-radio>
+            <el-radio :label="form.options[0]" />
+            <el-radio :label="form.options[1]" />
+            <el-radio :label="form.options[2]" />
+            <el-radio :label="form.options[3]" />
           </el-radio-group>
         </div>
         <el-form-item>
