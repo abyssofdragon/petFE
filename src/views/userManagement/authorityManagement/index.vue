@@ -14,13 +14,13 @@
       show-overflow
       height="500"
       :row-config="{ isHover: true }"
-      :data="list"
+      :data="display"
       @cell-dblclick="cellDBLClickEvent"
     >
       <vxe-column type="seq" width="60" />
-      <vxe-column field="id" title="用户ID" type="html" />
-      <vxe-column field="name" title="用户名" type="html" />
-      <vxe-column field="authority" title="用户权限" type="html" :formatter="formatterAuthority" />
+      <vxe-column field="id" title="用户ID" type="html" sortable />
+      <vxe-column field="name" title="用户名" type="html" sortable />
+      <vxe-column field="authority" title="用户权限" type="html" :formatter="formatterAuthority" :filters="[{label: '实习生', value: '1'}, {label: '管理员', value: '3'}, {label: '超级管理员', value: '5'}]" :filter-multiple="false" />
       <vxe-column title="操作" width="100" show-overflow>
         <template #default="{ row }">
           <vxe-button type="text" icon="vxe-icon-edit" @click="editEvent(row)" />
@@ -104,10 +104,10 @@ export default {
         totalResult: 0
       },
       list: [],
-      display:[],
+      display: [],
       filterName1: '',
       submitLoading: false,
-      tableData: [
+      initialTableData: [
         { id: 10001, name: 'JZY', authority: '5' },
         { id: 10002, name: 'ZPF', authority: '3' },
         { id: 10003, name: 'CC', authority: '3' },
@@ -188,7 +188,7 @@ export default {
       if (filterName) {
         const filterRE = new RegExp(filterName, 'gi')
         const searchProps = ['name']
-        const rest = this.tableData.filter(item => searchProps.some(key => XEUtils.toValueString(item[key]).toLowerCase().indexOf(filterName) > -1))
+        const rest = this.initialTableData.filter(item => searchProps.some(key => XEUtils.toValueString(item[key]).toLowerCase().indexOf(filterName) > -1))
         this.list = rest.map(row => {
           const item = Object.assign({}, row)
           searchProps.forEach(key => {
@@ -197,16 +197,18 @@ export default {
           return item
         })
       } else {
-        this.list = this.tableData
+        this.list = this.initialTableData
       }
+      console.log(1111, this.list)
       this.loading = false
       this.tablePage.totalResult = this.list.length
-      this.list = this.list.slice((this.tablePage.currentPage - 1) * this.tablePage.pageSize, this.tablePage.currentPage * this.tablePage.pageSize)
+      this.display = this.list.slice((this.tablePage.currentPage - 1) * this.tablePage.pageSize, this.tablePage.currentPage * this.tablePage.pageSize)
+      console.log(1111, this.display)
     },
     handlePageChange({ currentPage, pageSize }) {
       this.tablePage.currentPage = currentPage
       this.tablePage.pageSize = pageSize
-      this.findList()
+      this.searchEvent()
     }
   }
 }

@@ -9,20 +9,20 @@
         <el-button type="success" @click="addDialog = true">增加试题</el-button>
         <span style="float: right">
           <el-input
+            v-model="typeSearch"
             class="input"
             placeholder="请输入内容"
-            v-model="typeSearch"
-            clearable>
-          </el-input>
+            clearable
+          />
           <el-button>筛选病种</el-button>
         </span>
         <span style="float: right">
           <el-input
+            v-model="problemSearch"
             class="input"
             placeholder="请输入内容"
-            v-model="problemSearch"
-            clearable>
-          </el-input>
+            clearable
+          />
           <el-button>搜索题目</el-button>
         </span>
       </div>
@@ -36,13 +36,12 @@
           label="编号"
           width="180"
         />
-<<<<<<< HEAD
-=======
         <el-table-column
           prop="type"
           label="病种"
           width="180"
         />
+
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
@@ -52,6 +51,7 @@
             </el-form>
           </template>
         </el-table-column>
+
         <el-table-column
           prop="topic"
           label="题目"
@@ -75,6 +75,7 @@
             <el-button type="primary" icon="el-icon-edit" circle @click="modifyD(scope.$index)" />
             <el-button type="danger" icon="el-icon-delete" circle @click="deleteD(scope.$index)" />
           </template>
+
         </el-table-column>
       </el-table>
     </div>
@@ -107,120 +108,6 @@
       </el-form>
     </el-dialog>
 
-    <el-dialog
-      title="增加试题"
-      :visible.sync="addDialog"
-      width="30%"
-    >
-      <el-form ref="form" :model="problem" label-width="80px">
-        <el-form-item label="病种">
-          <el-input v-model="problem.type"></el-input>
-        </el-form-item>
-        <el-form-item label="题目">
-          <el-input v-model="problem.topic"></el-input>
-        </el-form-item>
-        <el-form-item label="选项">
-          <el-input v-model="problem.options"></el-input>
-        </el-form-item>
-        <el-form-item label="答案">
-          <el-input v-model="problem.answer"></el-input>
-        </el-form-item>
-        <el-form-item label="分值">
-          <el-input v-model="problem.score"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="addProblem">立即增加</el-button>
-          <el-button @click="addDialog = false">取消</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
-
-<<<<<<< HEAD
-    <div v-if="paperManagement" style="margin: 20px">
-      <el-table
-        :data="paperList"
-        style="width: 100%"
-      >
-        <el-table-column
-          prop="id"
-          label="编号"
-          width="180"
-        />
-        <el-table-column
-          prop="title"
-          label="试卷名称"
-          width="180"
-        />
-        <el-table-column
-          prop="score"
-          label="考试分数"
-          width="180"
-        />
-        <el-table-column
-          prop="duration"
-          label="考试时长"
-          width="180"
-        />
-        <el-table-column
-          prop="description"
-          label="试卷描述"
-          width="180"
-        />
-        <el-table-column
-          width="180"
-        >
-          <el-button type="primary" icon="el-icon-edit" circle />
-          <el-button type="danger" icon="el-icon-delete" circle />
-        </el-table-column>
-      </el-table>
-      <el-button type="success">增加试卷</el-button>
-    </div>
-
-    <div v-if="examManagement" style="margin: 20px">
-      <el-table
-        :data="examList"
-        style="width: 100%"
-      >
-        <el-table-column
-          prop="id"
-          label="编号"
-          width="180"
-        />
-        <el-table-column
-          prop="title"
-          label="考试名称"
-          width="180"
-        />
-        <el-table-column
-          prop="time"
-          label="考试时间"
-          width="180"
-        />
-        <el-table-column
-          prop="time"
-          label="考试时长"
-          width="180"
-        />
-        <el-table-column
-          prop="examineeList"
-          label="考生"
-          width="180"
-        />
-        <el-table-column
-          prop="description"
-          label="考试描述"
-          width="180"
-        />
-        <el-table-column
-          width="180"
-        >
-          <el-button type="primary" icon="el-icon-edit" circle />
-          <el-button type="danger" icon="el-icon-delete" circle />
-        </el-table-column>
-      </el-table>
-      <el-button type="success">增加考试</el-button>
-    </div>
-=======
     <el-dialog
       title="警告"
       :visible.sync="deleteDialog"
