@@ -169,7 +169,7 @@ export const constantRoutes = [
   {
     path: '/superAdmin',
     component: Layout,
-    redirect: '/superAdmin/userManagement',
+    redirect: '/superAdmin/userManagement/rootManagement',
     name: 'SuperAdmin',
     meta: {
       title: '超级管理员',
