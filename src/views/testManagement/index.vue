@@ -40,6 +40,8 @@
           prop="type"
           label="病种"
           width="180"
+          :filters="typeFilter"
+          :filter-method="filterType"
         />
 
         <el-table-column type="expand">
@@ -183,6 +185,7 @@ export default {
   data() {
     return {
       problemList: [{ id: 0, type: '口炎', topic: '这是第一个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'A', score: 2 }, { id: 1, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 }],
+      typeFilter: [{ text: '口炎', value: '口炎' }, { text: '肠炎', value: '肠炎' }],
       deleteDialog: false,
       addDialog: false,
       modifyDialog: false,
@@ -216,6 +219,9 @@ export default {
       this.problemList.push(this.problem)
       this.problem = { id: 0, type: '', topic: '', options: '', answer: '', score: 0 }
       this.addDialog = false
+    },
+    filterType(value, row) {
+      return row.type === value
     }
   }
 }

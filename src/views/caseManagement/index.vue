@@ -39,6 +39,8 @@
           prop="type"
           label="病种"
           width="180"
+          :filters="typeFilter"
+          :filter-method="filterType"
         />
         <el-table-column type="expand">
           <template slot-scope="props">
@@ -159,6 +161,7 @@ export default {
     return {
       caseList: [{ id: 0, type: '口炎', name: '这是第一个病例', state: '接诊状态a', content: '诊疗过程和方法a', result: '诊断结果a', method: '治疗方案a' },
         { id: 1, type: '肠炎', name: '这是第二个病例', state: '接诊状态b', content: '诊疗过程和方法b', result: '诊断结果b', method: '治疗方案b' }],
+      typeFilter: [{ text: '口炎', value: '口炎' }, { text: '肠炎', value: '肠炎' }],
       caseDialog: false,
       addDialog: false,
       modifyDialog: false,
@@ -192,6 +195,9 @@ export default {
       this.caseList.push(this.mycase)
       this.mycase = { id: 0, type: '', name: '', state: '', content: '', result: '', method: '' }
       this.addDialog = false
+    },
+    filterType(value, row) {
+      return row.type === value
     }
   }
 }
