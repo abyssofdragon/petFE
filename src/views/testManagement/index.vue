@@ -87,19 +87,19 @@
     >
       <el-form ref="form" :model="problem" label-width="80px">
         <el-form-item label="病种">
-          <el-input v-model="problem.type"></el-input>
+          <el-input v-model="problem.type" />
         </el-form-item>
         <el-form-item label="题目">
-          <el-input v-model="problem.topic"></el-input>
+          <el-input v-model="problem.topic" />
         </el-form-item>
         <el-form-item label="选项">
-          <el-input v-model="problem.options"></el-input>
+          <el-input v-model="problem.options" />
         </el-form-item>
         <el-form-item label="答案">
-          <el-input v-model="problem.answer"></el-input>
+          <el-input v-model="problem.answer" />
         </el-form-item>
         <el-form-item label="分值">
-          <el-input v-model="problem.score"></el-input>
+          <el-input v-model="problem.score" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="addProblem">立即增加</el-button>
