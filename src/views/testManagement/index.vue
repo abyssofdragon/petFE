@@ -116,9 +116,9 @@
         <el-form-item label="答案">
           <el-input v-model="problem.answer"></el-input>
         </el-form-item>
-        <el-form-item label="分值">
-          <el-input v-model="problem.score"></el-input>
-        </el-form-item>
+<!--        <el-form-item label="分值">-->
+<!--          <el-input v-model="problem.score"></el-input>-->
+<!--        </el-form-item>-->
         <el-form-item>
           <el-button type="primary" @click="modifyProblem">立即修改</el-button>
           <el-button @click="modifyDialog = false">取消</el-button>
@@ -153,9 +153,9 @@
         <el-form-item label="答案">
           <el-input v-model="problem.answer"></el-input>
         </el-form-item>
-        <el-form-item label="分值">
-          <el-input v-model="problem.score"></el-input>
-        </el-form-item>
+<!--        <el-form-item label="分值">-->
+<!--          <el-input v-model="problem.score"></el-input>-->
+<!--        </el-form-item>-->
         <el-form-item>
           <el-button type="primary" @click="addProblem">立即增加</el-button>
           <el-button @click="addDialog = false">取消</el-button>

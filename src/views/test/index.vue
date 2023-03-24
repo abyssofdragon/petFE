@@ -30,7 +30,7 @@
 
     <el-card v-if="showExam" class="box-card">
       <div slot="header" class="clearfix">
-        <span style="font-size: larger">第一个考试</span>
+        <span style="font-size: larger">{{ '根据' + checkedTypes[0] + '、' + checkedTypes[1] + '生成的试卷' }}</span>
         <el-button
           type="primary"
           style="float: right"
@@ -109,7 +109,6 @@ export default {
   },
   methods: {
     enterExam() {
-      alert(this.checkedTypes)
       this.showCard = false
       this.showResult = false
       this.showExam = true

@@ -6,6 +6,7 @@ import testManagement from './modules/testManagement'
 import test from './modules/test'
 import caseManagement from './modules/caseManagement'
 import functionManagement from './modules/functionManagement'
+import studyManagement from '@/router/modules/studyManagement'
 Vue.use(Router)
 
 /* Layout */
@@ -165,7 +166,8 @@ export const constantRoutes = [
     children: [
       functionManagement,
       testManagement,
-      caseManagement
+      caseManagement,
+      studyManagement
     ]
   },
   {
