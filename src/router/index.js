@@ -163,7 +163,9 @@ export const constantRoutes = [
       icon: 'nested'
     },
     children: [
-      functionManagement
+      functionManagement,
+      testManagement,
+      caseManagement
     ]
   },
   {
@@ -191,26 +193,10 @@ export const constantRoutes = [
   },
 
   {
-    path: '/testManagement',
-    component: Layout,
-    children: [
-      testManagement
-    ]
-  },
-
-  {
     path: '/test',
     component: Layout,
     children: [
       test
-    ]
-  },
-
-  {
-    path: '/caseManagement',
-    component: Layout,
-    children: [
-      caseManagement
     ]
   },
 

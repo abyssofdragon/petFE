@@ -1,7 +1,7 @@
 <template>
   <div style="margin: 20px">
     <div class="title">
-      测试管理
+      题库管理
     </div>
 
     <div style="margin: 20px">
@@ -45,8 +45,17 @@
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="选项">
-                <span>{{ props.row.options }}</span>
+              <el-form-item label="选项A">
+                <span>{{ props.row.optionA }}</span>
+              </el-form-item>
+              <el-form-item label="选项B">
+                <span>{{ props.row.optionB }}</span>
+              </el-form-item>
+              <el-form-item label="选项C">
+                <span>{{ props.row.optionC }}</span>
+              </el-form-item>
+              <el-form-item label="选项D">
+                <span>{{ props.row.optionD }}</span>
               </el-form-item>
             </el-form>
           </template>
@@ -81,6 +90,43 @@
     </div>
 
     <el-dialog
+      title="修改试题"
+      :visible.sync="modifyDialog"
+      width="30%"
+    >
+      <el-form ref="form" :model="problem" label-width="80px">
+        <el-form-item label="病种">
+          <el-input v-model="problem.type"></el-input>
+        </el-form-item>
+        <el-form-item label="题目">
+          <el-input v-model="problem.topic"></el-input>
+        </el-form-item>
+        <el-form-item label="选项A">
+          <el-input v-model="problem.optionA"></el-input>
+        </el-form-item>
+        <el-form-item label="选项B">
+          <el-input v-model="problem.optionB"></el-input>
+        </el-form-item>
+        <el-form-item label="选项C">
+          <el-input v-model="problem.optionC"></el-input>
+        </el-form-item>
+        <el-form-item label="选项D">
+          <el-input v-model="problem.optionD"></el-input>
+        </el-form-item>
+        <el-form-item label="答案">
+          <el-input v-model="problem.answer"></el-input>
+        </el-form-item>
+        <el-form-item label="分值">
+          <el-input v-model="problem.score"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="modifyProblem">立即修改</el-button>
+          <el-button @click="modifyDialog = false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <el-dialog
       title="增加试题"
       :visible.sync="addDialog"
       width="30%"
@@ -92,8 +138,17 @@
         <el-form-item label="题目">
           <el-input v-model="problem.topic"></el-input>
         </el-form-item>
-        <el-form-item label="选项">
-          <el-input v-model="problem.options"></el-input>
+        <el-form-item label="选项A">
+          <el-input v-model="problem.optionA"></el-input>
+        </el-form-item>
+        <el-form-item label="选项B">
+          <el-input v-model="problem.optionB"></el-input>
+        </el-form-item>
+        <el-form-item label="选项C">
+          <el-input v-model="problem.optionC"></el-input>
+        </el-form-item>
+        <el-form-item label="选项D">
+          <el-input v-model="problem.optionD"></el-input>
         </el-form-item>
         <el-form-item label="答案">
           <el-input v-model="problem.answer"></el-input>
@@ -127,12 +182,13 @@
 export default {
   data() {
     return {
-      problemList: [{ id: 0, type: '口炎', topic: '这是第一个题目', options: 'A.选项a  B.选项b  C.选项c  D.选项d', answer: 'A', score: 2 }, { id: 1, type: '肠炎', topic: '这是第二个题目', options: 'A.选项a  B.选项b  C.选项c  D.选项d', answer: 'B', score: 4 }],
+      problemList: [{ id: 0, type: '口炎', topic: '这是第一个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'A', score: 2 }, { id: 1, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 }],
       deleteDialog: false,
       addDialog: false,
+      modifyDialog: false,
       typeSearch: '',
       problemSearch: '',
-      problem: { id: 0, type: '', topic: '', options: '', answer: '', score: 0 },
+      problem: { id: 0, type: '', topic: '', optionA: '', optionB: '', optionC: '', optionD: '', answer: '', score: 0 },
       index: 0
     }
   },
@@ -140,6 +196,16 @@ export default {
     deleteD(index) {
       this.index = index
       this.deleteDialog = true
+    },
+    modifyD(index) {
+      this.index = index
+      this.problem = this.problemList[index]
+      this.modifyDialog = true
+    },
+    modifyProblem() {
+      this.problemList[this.index] = this.problem
+      this.problem = { id: 0, type: '', topic: '', options: '', answer: '', score: 0 }
+      this.modifyDialog = false
     },
     deleteProblem() {
       this.problemList.splice(this.index, 1)

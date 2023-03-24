@@ -68,7 +68,7 @@
           width="180"
         >
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" circle />
+            <el-button type="primary" icon="el-icon-edit" circle @click="modifyD(scope.$index)" />
             <el-button type="danger" icon="el-icon-delete" circle @click="deleteD(scope.$index)" />
           </template>
         </el-table-column>
@@ -107,6 +107,37 @@
     </el-dialog>
 
     <el-dialog
+      title="修改病例"
+      :visible.sync="modifyDialog"
+      width="30%"
+    >
+      <el-form ref="form" :model="mycase" label-width="150px">
+        <el-form-item label="病种">
+          <el-input v-model="mycase.type"></el-input>
+        </el-form-item>
+        <el-form-item label="病例名称">
+          <el-input v-model="mycase.name"></el-input>
+        </el-form-item>
+        <el-form-item label="接诊状态">
+          <el-input v-model="mycase.state"></el-input>
+        </el-form-item>
+        <el-form-item label="诊疗过程和方法">
+          <el-input v-model="mycase.content"></el-input>
+        </el-form-item>
+        <el-form-item label="诊断结果">
+          <el-input v-model="mycase.result"></el-input>
+        </el-form-item>
+        <el-form-item label="治疗方案">
+          <el-input v-model="mycase.method"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="modifyCase">立即修改</el-button>
+          <el-button @click="modifyDialog = false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <el-dialog
       title="警告"
       :visible.sync="caseDialog"
       width="30%"
@@ -130,6 +161,7 @@ export default {
         { id: 1, type: '肠炎', name: '这是第二个病例', state: '接诊状态b', content: '诊疗过程和方法b', result: '诊断结果b', method: '治疗方案b' }],
       caseDialog: false,
       addDialog: false,
+      modifyDialog: false,
       mycase: { id: 0, type: '', name: '', state: '', content: '', result: '', method: '' },
       typeSearch: '',
       caseSearch: '',
@@ -141,9 +173,19 @@ export default {
       this.index = index
       this.caseDialog = true
     },
-    deleteCase(e) {
+    modifyD(index) {
+      this.index = index
+      this.mycase = this.caseList[index]
+      this.modifyDialog = true
+    },
+    deleteCase() {
       this.caseList.splice(this.index, 1)
       this.caseDialog = false
+    },
+    modifyCase() {
+      this.caseList[this.index] = this.mycase
+      this.mycase = { id: 0, type: '', name: '', state: '', content: '', result: '', method: '' }
+      this.modifyDialog = false
     },
     addCase() {
       this.mycase.id = this.caseList[this.caseList.length - 1].id + 1
