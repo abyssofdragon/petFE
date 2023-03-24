@@ -8,27 +8,29 @@
       <div slot="header" class="clearfix">
         <span style="font-size: larger">病种列表</span>
         <span style="float: right">
-          <el-input
-            v-model="input"
-            class="input"
-            placeholder="请输入病种"
-            clearable
-          />
-          <el-button type="primary">
+          <span style="color: #99a9bf">
+            请选择病种，系统将根据选择自动生成试卷
+          </span>
+          <el-button type="primary" @click="enterExam">
             生成试卷
           </el-button>
         </span>
       </div>
 
-      <span v-for="o in type" :key="o">
-        <el-tag style="margin-left: 100px" @click="enterExam">{{ o }}</el-tag>
-      </span>
+      <el-checkbox-group
+        v-model="checkedTypes"
+        :min="1"
+        :max="20">
+        <el-checkbox style="width: 200px" v-for="o in type" :label="o" :key="o">
+          <el-tag>{{ o }}</el-tag>
+        </el-checkbox>
+      </el-checkbox-group>
 
     </el-card>
 
     <el-card v-if="showExam" class="box-card">
       <div slot="header" class="clearfix">
-        <span style="font-size: larger">第一个考试</span>
+        <span style="font-size: larger">{{ '根据' + checkedTypes[0] + '、' + checkedTypes[1] + '生成的试卷' }}</span>
         <el-button
           type="primary"
           style="float: right"
@@ -90,6 +92,7 @@ export default {
       showResult: false,
       score: '99',
       type: ['犬瘟热', '犬细小病毒', '犬传染性肝炎', '犬冠状病毒', '猫泛白细胞减少症', '猫病毒性病气管炎', '皮肤真菌感染'],
+      checkedTypes: [],
       form: {
         name: '',
         region: '',
@@ -105,8 +108,7 @@ export default {
     }
   },
   methods: {
-    enterExam(e) {
-      console.log(e.index)
+    enterExam() {
       this.showCard = false
       this.showResult = false
       this.showExam = true

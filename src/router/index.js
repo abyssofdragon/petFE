@@ -6,6 +6,7 @@ import testManagement from './modules/testManagement'
 import test from './modules/test'
 import caseManagement from './modules/caseManagement'
 import functionManagement from './modules/functionManagement'
+import studyManagement from '@/router/modules/studyManagement'
 Vue.use(Router)
 
 /* Layout */
@@ -163,7 +164,10 @@ export const constantRoutes = [
       icon: 'nested'
     },
     children: [
-      functionManagement
+      functionManagement,
+      testManagement,
+      caseManagement,
+      studyManagement
     ]
   },
   {
@@ -191,26 +195,10 @@ export const constantRoutes = [
   },
 
   {
-    path: '/testManagement',
-    component: Layout,
-    children: [
-      testManagement
-    ]
-  },
-
-  {
     path: '/test',
     component: Layout,
     children: [
       test
-    ]
-  },
-
-  {
-    path: '/caseManagement',
-    component: Layout,
-    children: [
-      caseManagement
     ]
   },
 
