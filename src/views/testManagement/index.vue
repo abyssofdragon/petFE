@@ -28,7 +28,8 @@
       </div>
 
       <el-table
-        :data="problemList"
+        :data="problemList.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+        :current-page.sync="currentPage"
         style="width: 100%"
       >
         <el-table-column
@@ -89,6 +90,15 @@
 
         </el-table-column>
       </el-table>
+
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-sizes="[5,10, 15, 20]"
+        :page-size="pagesize"
+        layout="total, sizes, prev, pager, next"
+        :total="total">
+      </el-pagination>
     </div>
 
     <el-dialog
@@ -184,8 +194,21 @@
 export default {
   data() {
     return {
-      problemList: [{ id: 0, type: '口炎', topic: '这是第一个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'A', score: 2 }, { id: 1, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 }],
+      problemList: [{ id: 0, type: '口炎', topic: '这是第一个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'A', score: 2 },
+        { id: 1, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
+        { id: 2, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
+        { id: 3, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
+        { id: 4, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
+        { id: 5, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
+        { id: 6, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
+        { id: 7, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
+        { id: 8, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
+        { id: 9, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 }
+      ],
       typeFilter: [{ text: '口炎', value: '口炎' }, { text: '肠炎', value: '肠炎' }],
+      currentPage: 1,
+      pagesize: 5,
+      total: 10,
       deleteDialog: false,
       addDialog: false,
       modifyDialog: false,
@@ -222,6 +245,12 @@ export default {
     },
     filterType(value, row) {
       return row.type === value
+    },
+    handleSizeChange(val) {
+      this.pagesize = val
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
     }
   }
 }

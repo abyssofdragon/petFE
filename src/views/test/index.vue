@@ -30,7 +30,7 @@
 
     <el-card v-if="showExam" class="box-card">
       <div slot="header" class="clearfix">
-        <span style="font-size: larger">{{ '根据' + checkedTypes[0] + '、' + checkedTypes[1] + '生成的试卷' }}</span>
+        <span style="font-size: larger">{{ paperName }}</span>
         <el-button
           type="primary"
           style="float: right"
@@ -51,7 +51,7 @@
         </div>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">立即交卷</el-button>
-          <el-button>取消</el-button>
+          <el-button type="primary" @click="select">取消</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -75,7 +75,7 @@
         </div>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">立即交卷</el-button>
-          <el-button @click="select">取消</el-button>
+          <el-button type="primary" @click="select">返回</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -93,6 +93,7 @@ export default {
       score: '99',
       type: ['犬瘟热', '犬细小病毒', '犬传染性肝炎', '犬冠状病毒', '猫泛白细胞减少症', '猫病毒性病气管炎', '皮肤真菌感染'],
       checkedTypes: [],
+      paperName: '',
       form: {
         name: '',
         region: '',
@@ -109,6 +110,14 @@ export default {
   },
   methods: {
     enterExam() {
+      this.paperName = '根据'
+      for (let i = 0; i < this.checkedTypes.length; i++) {
+        this.paperName = this.paperName + this.checkedTypes[i]
+        if (i !== this.checkedTypes.length - 1) {
+          this.paperName = this.paperName + ', '
+        }
+      }
+      this.paperName = this.paperName + '生成的试卷'
       this.showCard = false
       this.showResult = false
       this.showExam = true
