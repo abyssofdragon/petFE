@@ -115,10 +115,10 @@
     >
       <el-form ref="form" :model="mycase" label-width="120px">
         <el-form-item label="病种">
-          <el-input v-model="mycase.type"></el-input>
+          <el-input v-model="mycase.type" />
         </el-form-item>
         <el-form-item label="病例名称">
-          <el-input v-model="mycase.name"></el-input>
+          <el-input v-model="mycase.name" />
         </el-form-item>
         <el-form-item label="接诊状态">
           <el-input v-model="mycase.state" type="textarea" autosize></el-input>

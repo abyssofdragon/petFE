@@ -92,13 +92,13 @@
       </el-table>
 
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
         :page-sizes="[5,10, 15, 20]"
         :page-size="pagesize"
         layout="total, sizes, prev, pager, next"
-        :total="total">
-      </el-pagination>
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
 
     <el-dialog
@@ -108,29 +108,29 @@
     >
       <el-form ref="form" :model="problem" label-width="80px">
         <el-form-item label="病种">
-          <el-input v-model="problem.type"></el-input>
+          <el-input v-model="problem.type" />
         </el-form-item>
         <el-form-item label="题目">
-          <el-input v-model="problem.topic"></el-input>
+          <el-input v-model="problem.topic" />
         </el-form-item>
         <el-form-item label="选项A">
-          <el-input v-model="problem.optionA"></el-input>
+          <el-input v-model="problem.optionA" />
         </el-form-item>
         <el-form-item label="选项B">
-          <el-input v-model="problem.optionB"></el-input>
+          <el-input v-model="problem.optionB" />
         </el-form-item>
         <el-form-item label="选项C">
-          <el-input v-model="problem.optionC"></el-input>
+          <el-input v-model="problem.optionC" />
         </el-form-item>
         <el-form-item label="选项D">
-          <el-input v-model="problem.optionD"></el-input>
+          <el-input v-model="problem.optionD" />
         </el-form-item>
         <el-form-item label="答案">
-          <el-input v-model="problem.answer"></el-input>
+          <el-input v-model="problem.answer" />
         </el-form-item>
-<!--        <el-form-item label="分值">-->
-<!--          <el-input v-model="problem.score"></el-input>-->
-<!--        </el-form-item>-->
+        <!--        <el-form-item label="分值">-->
+        <!--          <el-input v-model="problem.score"></el-input>-->
+        <!--        </el-form-item>-->
         <el-form-item>
           <el-button type="primary" @click="modifyProblem">立即修改</el-button>
           <el-button @click="modifyDialog = false">取消</el-button>
@@ -151,23 +151,23 @@
           <el-input v-model="problem.topic" />
         </el-form-item>
         <el-form-item label="选项A">
-          <el-input v-model="problem.optionA"></el-input>
+          <el-input v-model="problem.optionA" />
         </el-form-item>
         <el-form-item label="选项B">
-          <el-input v-model="problem.optionB"></el-input>
+          <el-input v-model="problem.optionB" />
         </el-form-item>
         <el-form-item label="选项C">
-          <el-input v-model="problem.optionC"></el-input>
+          <el-input v-model="problem.optionC" />
         </el-form-item>
         <el-form-item label="选项D">
-          <el-input v-model="problem.optionD"></el-input>
+          <el-input v-model="problem.optionD" />
         </el-form-item>
         <el-form-item label="答案">
           <el-input v-model="problem.answer" />
         </el-form-item>
-<!--        <el-form-item label="分值">-->
-<!--          <el-input v-model="problem.score"></el-input>-->
-<!--        </el-form-item>-->
+        <!--        <el-form-item label="分值">-->
+        <!--          <el-input v-model="problem.score"></el-input>-->
+        <!--        </el-form-item>-->
         <el-form-item>
           <el-button type="primary" @click="addProblem">立即增加</el-button>
           <el-button @click="addDialog = false">取消</el-button>

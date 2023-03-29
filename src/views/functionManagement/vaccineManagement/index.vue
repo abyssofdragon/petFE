@@ -1,5 +1,4 @@
 <!-- 疫苗管理 -->
-<!-- 药品管理 -->
 <template>
   <div>
     <vxe-toolbar>
@@ -49,6 +48,7 @@
       @page-change="handlePageChange"
     />
     <vxe-modal
+      id="vaccine"
       v-model="showEdit"
       :title="selectRow ? '编辑&保存' : '新增&保存'"
       width="800"
@@ -57,6 +57,10 @@
       :loading="submitLoading"
       resize
       destroy-on-close
+      show-zoom
+      remember
+      storage
+      transfer
     >
       <template #default>
         <vxe-form :data="formData" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent">
