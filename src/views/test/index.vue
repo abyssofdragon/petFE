@@ -40,13 +40,27 @@
       <el-form ref="form" :model="form" label-width="80px">
         <div v-for="o in 5" :key="o" style="margin: 50px">
           <div>
-            {{ o + '. ' + form.problem[o] }}
+            <span>
+              {{ o + '. ' + form.problem[o] }}
+            </span>
+            <span style="float: right">
+              {{ '(' + form.resource[o].charAt(0) + ')' }}
+            </span>
           </div>
+          <br/>
           <el-radio-group v-model="form.resource[o]">
-            <el-radio :label="form.options[0]" />
-            <el-radio :label="form.options[1]" />
-            <el-radio :label="form.options[2]" />
-            <el-radio :label="form.options[3]" />
+            <div>
+              <el-radio :label="form.options[0]" />
+            </div>
+            <div>
+              <el-radio :label="form.options[1]" />
+            </div>
+            <div>
+              <el-radio :label="form.options[2]" />
+            </div>
+            <div>
+              <el-radio :label="form.options[3]" />
+            </div>
           </el-radio-group>
         </div>
         <el-form-item>
@@ -64,13 +78,29 @@
       <el-form ref="form" :model="form" label-width="80px">
         <div v-for="o in 5" :key="o" style="margin: 50px">
           <div>
-            {{ o + '. ' + form.problem[o] }}
+            <i v-if="form.marking[o]" class="el-icon-error" style="color: red"></i>
+            <i v-if="form.remarking[o]" class="el-icon-success" style="color: blue"></i>
+            <span>
+              {{ o + '. ' + form.problem[o] }}
+            </span>
+            <span style="float: right">
+              {{ '(' + form.resource[o].charAt(0) + ')' }}
+            </span>
           </div>
-          <el-radio-group v-model="form.resource[o]">
-            <el-radio :label="form.options[0]" />
-            <el-radio :label="form.options[1]" />
-            <el-radio :label="form.options[2]" />
-            <el-radio :label="form.options[3]" />
+          <br/>
+          <el-radio-group disabled v-model="form.resource[o]">
+            <div>
+              <el-radio :label="form.options[0]" />
+            </div>
+            <div>
+              <el-radio :label="form.options[1]" />
+            </div>
+            <div>
+              <el-radio :label="form.options[2]" />
+            </div>
+            <div>
+              <el-radio :label="form.options[3]" />
+            </div>
           </el-radio-group>
         </div>
         <el-form-item>
@@ -95,16 +125,11 @@ export default {
       checkedTypes: [],
       paperName: '',
       form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
         options: ['A.选项a', 'B.选项b', 'C.选项c', 'D.选项d'],
         problem: ['', '第一题', '甲', '乙', '丙', '丁'],
         resource: ['', 'B.选项b', 'A.选项a', 'D.选项d', '', ''],
-        desc: ''
+        marking: [0, 0, 1, 0, 0, 1],
+        remarking: [0, 1, 0, 1, 1, 0]
       }
     }
   },
