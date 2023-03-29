@@ -111,9 +111,9 @@
     <el-dialog
       title="修改病例"
       :visible.sync="modifyDialog"
-      width="30%"
+      width="60%"
     >
-      <el-form ref="form" :model="mycase" label-width="150px">
+      <el-form ref="form" :model="mycase" label-width="120px">
         <el-form-item label="病种">
           <el-input v-model="mycase.type"></el-input>
         </el-form-item>
@@ -121,16 +121,16 @@
           <el-input v-model="mycase.name"></el-input>
         </el-form-item>
         <el-form-item label="接诊状态">
-          <el-input v-model="mycase.state"></el-input>
+          <el-input v-model="mycase.state" type="textarea" autosize></el-input>
         </el-form-item>
         <el-form-item label="诊疗过程和方法">
-          <el-input v-model="mycase.content"></el-input>
+          <el-input v-model="mycase.content" type="textarea" autosize></el-input>
         </el-form-item>
         <el-form-item label="诊断结果">
-          <el-input v-model="mycase.result"></el-input>
+          <el-input v-model="mycase.result" type="textarea" autosize></el-input>
         </el-form-item>
         <el-form-item label="治疗方案">
-          <el-input v-model="mycase.method"></el-input>
+          <el-input v-model="mycase.method" type="textarea" autosize></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="modifyCase">立即修改</el-button>

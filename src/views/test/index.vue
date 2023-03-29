@@ -20,7 +20,7 @@
       <el-checkbox-group
         v-model="checkedTypes"
         :min="1"
-        :max="20">
+        :max="5">
         <el-checkbox style="width: 200px" v-for="o in type" :label="o" :key="o">
           <el-tag>{{ o }}</el-tag>
         </el-checkbox>
