@@ -8,20 +8,20 @@
       <div>
         <span style="float: right">
           <el-input
+            v-model="typeSearch"
             class="input"
             placeholder="请输入内容"
-            v-model="typeSearch"
-            clearable>
-          </el-input>
+            clearable
+          />
           <el-button>筛选病种</el-button>
         </span>
         <span style="float: right">
           <el-input
+            v-model="caseSearch"
             class="input"
             placeholder="请输入内容"
-            v-model="caseSearch"
-            clearable>
-          </el-input>
+            clearable
+          />
           <el-button>搜索病例</el-button>
         </span>
         <span>
@@ -39,8 +39,8 @@
       >
         <el-table-column
           type="selection"
-          width="55">
-        </el-table-column>
+          width="55"
+        />
         <el-table-column
           prop="id"
           label="编号"

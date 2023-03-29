@@ -20,8 +20,9 @@
       <el-checkbox-group
         v-model="checkedTypes"
         :min="1"
-        :max="20">
-        <el-checkbox style="width: 200px" v-for="o in type" :label="o" :key="o">
+        :max="20"
+      >
+        <el-checkbox v-for="o in type" :key="o" style="width: 200px" :label="o">
           <el-tag>{{ o }}</el-tag>
         </el-checkbox>
       </el-checkbox-group>
