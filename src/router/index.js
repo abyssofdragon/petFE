@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import hospitalGuide from './modules/hospitalGuide'
 import userManagement from './modules/userManagement'
 import testManagement from './modules/testManagement'
 import test from './modules/test'
@@ -36,6 +36,7 @@ import Layout from '@/layout'
  * all roles can be accessed
  */
 export const constantRoutes = [
+  
   {
     path: '/login',
     component: () => import('@/views/login/index'),
@@ -46,6 +47,15 @@ export const constantRoutes = [
     path: '/404',
     component: () => import('@/views/404'),
     hidden: true
+  },
+
+  {
+    path: '/hospitalGuide',
+    component: Layout,
+    redirect: '/hospitalGuide',
+    children: [
+      hospitalGuide
+    ]
   },
 
   {
