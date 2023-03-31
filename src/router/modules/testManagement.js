@@ -2,5 +2,5 @@ export default {
   path: 'testManagement',
   component: () => import('@/views/testManagement/index'),
   name: 'testManagement',
-  meta: { title: '测试管理', icon: 'form' }
+  meta: { title: '测试管理' }
 }
