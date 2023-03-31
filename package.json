@@ -21,6 +21,14 @@
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",
+    "photo-sphere-viewer": "^4.8.1",
+    "three": "^0.150.1",
+    "three-fbx-loader": "^1.0.3",
+    "three-obj-mtl-loader": "^1.0.3",
+    "three-orbit-controls": "^82.1.0",
+    "three-stats": "^1.0.1",
+    "three-trackballcontrols": "^0.9.0",
+    "uevent": "^2.2.0",
     "view-design": "^4.7.0",
     "vue": "2.6.10",
     "vue-router": "3.0.6",
@@ -30,6 +38,7 @@
     "xgplayer": "^2.32.2"
   },
   "devDependencies": {
+    "@types/three": "^0.149.0",
     "@vue/cli-plugin-babel": "4.4.4",
     "@vue/cli-plugin-eslint": "4.4.4",
     "@vue/cli-plugin-unit-jest": "4.4.4",
