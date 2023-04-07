@@ -104,7 +104,6 @@
           </el-radio-group>
         </div>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">立即交卷</el-button>
           <el-button type="primary" @click="select">返回</el-button>
         </el-form-item>
       </el-form>

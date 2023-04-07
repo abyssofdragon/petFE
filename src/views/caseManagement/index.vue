@@ -80,29 +80,59 @@
     <el-dialog
       title="增加病例"
       :visible.sync="addDialog"
-      width="30%"
+      width="60%"
     >
-      <el-form ref="form" :model="mycase" label-width="150px">
+      <el-form ref="form" :model="addCase" label-width="120px">
+        <el-form-item label="主人">
+          <el-input v-model="addCase.owner" />
+        </el-form-item>
+        <el-form-item label="地址">
+          <el-input v-model="addCase.familyAddress" />
+        </el-form-item>
+        <el-form-item label="电话">
+          <el-input v-model="addCase.phoneNumber" />
+        </el-form-item>
+        <el-form-item label="宠物名">
+          <el-input v-model="addCase.petName" />
+        </el-form-item>
+        <el-form-item label="类别">
+          <el-input v-model="addCase.petCategory" />
+        </el-form-item>
+        <el-form-item label="品种">
+          <el-input v-model="addCase.breed" />
+        </el-form-item>
         <el-form-item label="病种">
-          <el-input v-model="mycase.type" />
+          <el-input v-model="addCase.type" />
+        </el-form-item>
+        <el-form-item label="年龄">
+          <el-input v-model="addCase.petAge" />
+        </el-form-item>
+        <el-form-item label="性别">
+          <el-input v-model="addCase.gender" />
+        </el-form-item>
+        <el-form-item label="免疫">
+          <el-input v-model="addCase.immunity" />
+        </el-form-item>
+        <el-form-item label="体重">
+          <el-input v-model="addCase.petWeight" />
         </el-form-item>
         <el-form-item label="病例名称">
-          <el-input v-model="mycase.name" />
+          <el-input v-model="addCase.name" />
         </el-form-item>
         <el-form-item label="接诊状态">
-          <el-input v-model="mycase.state" />
+          <el-input v-model="addCase.state" type="textarea" autosize />
         </el-form-item>
         <el-form-item label="诊疗过程和方法">
-          <el-input v-model="mycase.content" />
+          <el-input v-model="addCase.content" type="textarea" autosize />
         </el-form-item>
         <el-form-item label="诊断结果">
-          <el-input v-model="mycase.result" />
+          <el-input v-model="addCase.result" type="textarea" autosize />
         </el-form-item>
         <el-form-item label="治疗方案">
-          <el-input v-model="mycase.method" />
+          <el-input v-model="addCase.method" type="textarea" autosize />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="addCase">立即增加</el-button>
+          <el-button type="primary" @click="addNewCase">立即增加</el-button>
           <el-button @click="addDialog = false">取消</el-button>
         </el-form-item>
       </el-form>
@@ -113,27 +143,85 @@
       :visible.sync="modifyDialog"
       width="60%"
     >
-      <el-form ref="form" :model="mycase" label-width="120px">
+      <el-form ref="form" :model="modifyCase" label-width="120px">
+        <el-form-item label="主人">
+          <el-input v-model="modifyCase.owner" />
+        </el-form-item>
+        <el-form-item label="地址">
+          <el-input v-model="modifyCase.familyAddress" />
+        </el-form-item>
+        <el-form-item label="电话">
+          <el-input v-model="modifyCase.phoneNumber" />
+        </el-form-item>
+        <el-form-item label="宠物名">
+          <el-input v-model="modifyCase.petName" />
+        </el-form-item>
+        <el-form-item label="类别">
+          <el-input v-model="modifyCase.petCategory" />
+        </el-form-item>
+        <el-form-item label="品种">
+          <el-input v-model="modifyCase.breed" />
+        </el-form-item>
         <el-form-item label="病种">
-          <el-input v-model="mycase.type" />
+          <el-input v-model="modifyCase.type" />
+        </el-form-item>
+        <el-form-item label="年龄">
+          <el-input v-model="modifyCase.petAge" />
+        </el-form-item>
+        <el-form-item label="性别">
+          <el-input v-model="modifyCase.gender" />
+        </el-form-item>
+        <el-form-item label="免疫">
+          <el-input v-model="modifyCase.immunity" />
+        </el-form-item>
+        <el-form-item label="体重">
+          <el-input v-model="modifyCase.petWeight" />
         </el-form-item>
         <el-form-item label="病例名称">
-          <el-input v-model="mycase.name" />
+          <el-input v-model="modifyCase.name" />
         </el-form-item>
         <el-form-item label="接诊状态">
-          <el-input v-model="mycase.state" type="textarea" autosize></el-input>
+          <el-input v-model="modifyCase.state" type="textarea" autosize />
         </el-form-item>
+        <el-upload
+          class="upload-demo"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          style="margin-left: 120px; display: inline-block"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :before-remove="beforeRemove"
+          multiple
+          :limit="3"
+          :on-exceed="handleExceed"
+          :file-list="imageList">
+          <el-button size="small" type="primary">上传图片</el-button>
+          <div slot="tip" class="el-upload__tip">为接诊状态上传图片</div>
+        </el-upload>
+        <el-upload
+          class="upload-demo"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          style="margin-left: 120px; display: inline-block"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :before-remove="beforeRemove"
+          multiple
+          :limit="3"
+          :on-exceed="handleExceed"
+          :file-list="videoList">
+          <el-button size="small" type="primary">上传视频</el-button>
+          <div slot="tip" class="el-upload__tip">为接诊状态上传视频</div>
+        </el-upload>
         <el-form-item label="诊疗过程和方法">
-          <el-input v-model="mycase.content" type="textarea" autosize></el-input>
+          <el-input v-model="modifyCase.content" type="textarea" autosize />
         </el-form-item>
         <el-form-item label="诊断结果">
-          <el-input v-model="mycase.result" type="textarea" autosize></el-input>
+          <el-input v-model="modifyCase.result" type="textarea" autosize />
         </el-form-item>
         <el-form-item label="治疗方案">
-          <el-input v-model="mycase.method" type="textarea" autosize></el-input>
+          <el-input v-model="modifyCase.method" type="textarea" autosize />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="modifyCase">立即修改</el-button>
+          <el-button type="primary" @click="modifyOldCase">立即修改</el-button>
           <el-button @click="modifyDialog = false">取消</el-button>
         </el-form-item>
       </el-form>
@@ -159,13 +247,18 @@
 export default {
   data() {
     return {
-      caseList: [{ id: 0, type: '口炎', name: '这是第一个病例', state: '接诊状态a', content: '诊疗过程和方法a', result: '诊断结果a', method: '治疗方案a' },
-        { id: 1, type: '肠炎', name: '这是第二个病例', state: '接诊状态b', content: '诊疗过程和方法b', result: '诊断结果b', method: '治疗方案b' }],
+      caseList: [{ id: 0, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
+          petWeight: '', type: '口炎', name: '这是第一个病例', state: '接诊状态a', content: '诊疗过程和方法a', result: '诊断结果a', method: '治疗方案a' },
+        { id: 1, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
+          petWeight: '', type: '肠炎', name: '这是第二个病例', state: '接诊状态b', content: '诊疗过程和方法b', result: '诊断结果b', method: '治疗方案b' }],
       typeFilter: [{ text: '口炎', value: '口炎' }, { text: '肠炎', value: '肠炎' }],
       caseDialog: false,
       addDialog: false,
       modifyDialog: false,
-      mycase: { id: 0, type: '', name: '', state: '', content: '', result: '', method: '' },
+      addCase: { id: 0, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
+        petWeight: '', type: '', name: '', state: '', content: '', result: '', method: '' },
+      modifyCase: { id: 0, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
+        petWeight: '', type: '', name: '', state: '', content: '', result: '', method: '' },
       typeSearch: '',
       caseSearch: '',
       index: 0
@@ -178,22 +271,22 @@ export default {
     },
     modifyD(index) {
       this.index = index
-      this.mycase = this.caseList[index]
+      this.modifyCase = this.caseList[index]
       this.modifyDialog = true
     },
     deleteCase() {
       this.caseList.splice(this.index, 1)
       this.caseDialog = false
     },
-    modifyCase() {
-      this.caseList[this.index] = this.mycase
-      this.mycase = { id: 0, type: '', name: '', state: '', content: '', result: '', method: '' }
+    modifyOldCase() {
+      this.caseList[this.index] = this.modifyCase
+      this.modifyCase = { id: 0, type: '', name: '', state: '', content: '', result: '', method: '' }
       this.modifyDialog = false
     },
-    addCase() {
-      this.mycase.id = this.caseList[this.caseList.length - 1].id + 1
-      this.caseList.push(this.mycase)
-      this.mycase = { id: 0, type: '', name: '', state: '', content: '', result: '', method: '' }
+    addNewCase() {
+      this.addCase.id = this.caseList[this.caseList.length - 1].id + 1
+      this.caseList.push(this.addCase)
+      this.addCase = { id: 0, type: '', name: '', state: '', content: '', result: '', method: '' }
       this.addDialog = false
     },
     filterType(value, row) {

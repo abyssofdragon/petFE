@@ -18,7 +18,7 @@
           <div>
             <el-image
               style="width: 100px; height: 100px"
-              :src="url"
+              :src="imageurl"
               :fit="fit"></el-image>
           </div>
         </el-descriptions-item>
@@ -27,7 +27,7 @@
           <div>
             <el-image
               style="width: 100px; height: 100px"
-              :src="url"
+              :src="imageurl"
               :fit="fit"></el-image>
           </div>
         </el-descriptions-item>
@@ -36,17 +36,14 @@
           <div>
             <el-image
               style="width: 100px; height: 100px"
-              :src="url"
+              :src="imageurl"
               :fit="fit"></el-image>
           </div>
         </el-descriptions-item>
         <el-descriptions-item label="治疗方案" :span="16">
           <div>16</div>
-          <div>
-            <el-image
-              style="width: 100px; height: 100px"
-              :src="url"
-              :fit="fit"></el-image>
+          <div class="videoPlayer">
+            <xg-player :url="videourl" @triggerEvent="triggerEvent" ></xg-player>
           </div>
         </el-descriptions-item>
       </el-descriptions>
@@ -55,16 +52,30 @@
 </template>
 
 <script>
+import XgPlayer from '@/components/XgPlayer'
 
 export default {
+  components: {
+    XgPlayer
+  },
   data() {
     return {
-      url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+      imageurl: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+      videourl: require('../../../public/static/videos/video.mp4')
+    }
+  },
+  methods: {
+    triggerEvent(value) {
+      console.log('是否播放：', value)
     }
   }
 }
 </script>
 
 <style>
-
+.videoPlayer {
+  height: 300px;
+  width: 500px;
+  margin: 0 auto;
+}
 </style>
