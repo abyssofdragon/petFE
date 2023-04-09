@@ -30,7 +30,7 @@
 							  	{
 									id:'circle',
 									tooltip:'去手术室',
-									circle:30,
+									circle:20,
 									svgStyle : {
 										fill:'rgba(255,255,0,0.3)',
 										stroke:'yellow',
@@ -38,14 +38,27 @@
 									},
 									longitude: 1,
 									latitude: -0.28,
-									anchor: 'center right',
-							  	}
-						    ],
+								},
+								{
+									id: 'new-marker',
+									circle:20,
+                    				svgStyle : {
+										fill:'rgba(255,255,0,0.3)',
+										stroke:'yellow',
+										strokeWidth:'2px',
+									},
+									longitude: -0.5,
+									latitude: -0.28,
+									tooltip:'前台 <b>点击查看详细信息</b>',
+									content: document.getElementById('front-desk').innerHTML,
+								}
+						    ]
 					  }],
 				  ],
 			  });
 			const markersPlugin = this.viewer.getPlugin(MarkersPlugin);
 				markersPlugin.on('select-marker', (e, marker) => {
+					if(marker.id == 'circle'){
 					this.viewer.animate({
 						longitude: marker.config.longitude,
 						latitude: marker.config.latitude,
@@ -60,17 +73,18 @@
 								tooltip:'去住院部',
 								longitude: -1.8,
 								latitude: -0.28,
-						  	}),
+						  	}
+							),
 						  	this.viewer.animate({
 								zoom: 50,
 								speed: '2rpm',
 						  	}).then(() =>
 								this.imgurl2 = this.imgurl3,
 								console.log("继续操作")
-						  )
+						  	)
 					)  
 					)
-
+				}
 			  });
 		  }
 	  }
