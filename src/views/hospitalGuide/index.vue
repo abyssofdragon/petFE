@@ -6,7 +6,18 @@ import { Viewer } from 'photo-sphere-viewer'
 import 'photo-sphere-viewer/dist/photo-sphere-viewer.css'
 import { MarkersPlugin } from 'photo-sphere-viewer/dist/plugins/markers'
 import 'photo-sphere-viewer/dist/plugins/markers.css'
+import axios from 'axios'
+import { get } from 'js-cookie'
 	  export default {
+      method:{
+        getText(){
+          axios({
+            methods:get,
+            url:'http://localhost:8084/hospitalGuide/text',
+            timeout:30000
+          })
+        }
+      },
 		  data() {
 			  return {
 				  viewer: '',
@@ -42,7 +53,7 @@ import 'photo-sphere-viewer/dist/plugins/markers.css'
             {
               id: 'new-marker',
               circle: 20,
-                    				svgStyle: {
+                svgStyle: {
                 fill: 'rgba(255,255,0,0.3)',
                 stroke: 'yellow',
                 strokeWidth: '2px'
@@ -50,7 +61,7 @@ import 'photo-sphere-viewer/dist/plugins/markers.css'
               longitude: -0.5,
               latitude: -0.28,
               tooltip: '前台 <b>点击查看详细信息</b>',
-              content: '前台信息读取'
+              content: '前台信息读取'+getText("前台")
             }
 						    ]
 					  }]
@@ -131,7 +142,7 @@ import 'photo-sphere-viewer/dist/plugins/markers.css'
             {
               id: 'new-marker',
               circle: 20,
-                    				svgStyle: {
+                svgStyle: {
                 fill: 'rgba(255,255,0,0.3)',
                 stroke: 'yellow',
                 strokeWidth: '2px'
