@@ -190,6 +190,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 
 export default {
   data() {
@@ -218,7 +219,19 @@ export default {
       index: 0
     }
   },
+  created() {
+    this.getAllProblem()
+  },
   methods: {
+    getAllProblem() {
+      axios({
+        method: 'post',
+        url: 'http://124.222.60.144:8084/user/login',
+        timeout: 30000
+      }).then(res => {
+        console.log(res)
+      })
+    },
     deleteD(index) {
       this.index = index
       this.deleteDialog = true
