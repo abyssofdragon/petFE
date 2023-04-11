@@ -137,7 +137,7 @@ export default {
         { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
         { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' }
       ],
-      result:[],
+      result: [],
       selectRow: null,
       showEdit: false,
       formData: {
@@ -170,8 +170,8 @@ export default {
         timeout: 30000
         // data: FormDatas
       }).then(res => {
-        this.result=res.data.data
-         console.log(111, this.result)
+        this.result = res.data.data
+        console.log(111, this.result)
       })
     },
     visibleMethod({ data }) {
