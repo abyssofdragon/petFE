@@ -2,6 +2,7 @@ import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 import axios from 'axios'
+import api from "@/store/modules/api";
 
 const getDefaultState = () => {
   return {
@@ -35,13 +36,14 @@ const actions = {
     const FormDatas = new FormData()
     FormDatas.append('userName', username)
     FormDatas.append('password', password)
-    axios({
+    api({
       method: 'post',
       url: 'http://localhost:8084/user/login',
       // url: 'http://124.222.60.144:8084/user/login',
       timeout: 30000,
       data: FormDatas
     }).then(res => {
+      console.log(res)
       return new Promise((resolve, reject) => {
         // login({ userName: username.trim(), password: password }).then(response => {
         //   console.log('res: ')
@@ -54,6 +56,7 @@ const actions = {
         // })
         const { data } = res
         console.log(data.data)
+        localStorage.setItem('token', data.data.Authorization)
         commit('SET_TOKEN', data.data.Authorization)
         setToken(data.data.Authorization)
         resolve()

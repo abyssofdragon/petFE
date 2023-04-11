@@ -48,8 +48,6 @@ Vue.use(ElementUI, { locale })
 Vue.config.productionTip = false
 
 // 给每个请求都拦截下来 添加请求的token信息
-localStorage.setItem('token', 'eyJUeXBlIjoiSnd0IiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MyIsImV4cCI6MTY4MTE4ODU0MH0.WswupNZqy-mMtd6cpW5lHUo9NeP8SCm_hd2ZDdVdW8s')
-
 axios.interceptors.request.use(function(config) {
   config.headers.Authorization = 'Bearer ' + localStorage.getItem('token')
   return config

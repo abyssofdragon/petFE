@@ -23,7 +23,7 @@
             placeholder="请输入内容"
             clearable
           />
-          <el-button>搜索题目</el-button>
+          <el-button @click="searchPrbByCtn">搜索题目</el-button>
         </span>
       </div>
 
@@ -33,12 +33,12 @@
         style="width: 100%"
       >
         <el-table-column
-          prop="id"
+          prop="questionId"
           label="编号"
           width="180"
         />
         <el-table-column
-          prop="type"
+          prop="category"
           label="病种"
           width="180"
           :filters="typeFilter"
@@ -65,7 +65,7 @@
         </el-table-column>
 
         <el-table-column
-          prop="topic"
+          prop="content"
           label="题目"
           width="180"
         />
@@ -206,7 +206,8 @@ export default {
         { id: 8, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
         { id: 9, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 }
       ],
-      typeFilter: [{ text: '口炎', value: '口炎' }, { text: '肠炎', value: '肠炎' }],
+      typeFilter: [{ text: '犬瘟热', value: '犬瘟热' }, { text: '猫感冒', value: '猫感冒' }, { text: '鹦鹉热', value: '鹦鹉热' },
+        { text: '猫病毒性鼻气管炎', value: '猫病毒性鼻气管炎' }, { text: '猫泛白细胞减少症', value: '猫泛白细胞减少症' }],
       currentPage: 1,
       pagesize: 5,
       total: 10,
@@ -224,12 +225,30 @@ export default {
   },
   methods: {
     getAllProblem() {
+      console.log('111: ' + localStorage.getItem('token'))
       axios({
-        method: 'post',
-        url: 'http://124.222.60.144:8084/user/login',
+        method: 'get',
+        url: 'http://localhost:8084/question/all',
         timeout: 30000
       }).then(res => {
         console.log(res)
+        this.problemList = res.data.data
+        this.total = this.problemList.length
+      })
+    },
+    searchPrbByCtn() {
+      console.log('111: ' + Storage.getItem('token'))
+      const FormData = new FormData()
+      FormData.append('content', this.problemSearch)
+      axios({
+        method: 'post',
+        url: 'http://localhost:8084/question/searchByContent',
+        timeout: 30000,
+        FormData
+      }).then(res => {
+        console.log(res)
+        this.problemList = res.data.data
+        this.total = this.problemList.length
       })
     },
     deleteD(index) {
@@ -257,7 +276,7 @@ export default {
       this.addDialog = false
     },
     filterType(value, row) {
-      return row.type === value
+      return row.category === value
     },
     handleSizeChange(val) {
       this.pagesize = val
