@@ -193,7 +193,8 @@
           multiple
           :limit="3"
           :on-exceed="handleExceed"
-          :file-list="imageList">
+          :file-list="imageList"
+        >
           <el-button size="small" type="primary">上传图片</el-button>
           <div slot="tip" class="el-upload__tip">为接诊状态上传图片</div>
         </el-upload>
@@ -207,7 +208,8 @@
           multiple
           :limit="3"
           :on-exceed="handleExceed"
-          :file-list="videoList">
+          :file-list="videoList"
+        >
           <el-button size="small" type="primary">上传视频</el-button>
           <div slot="tip" class="el-upload__tip">为接诊状态上传视频</div>
         </el-upload>
@@ -248,9 +250,9 @@ export default {
   data() {
     return {
       caseList: [{ id: 0, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
-          petWeight: '', type: '口炎', name: '这是第一个病例', state: '接诊状态a', content: '诊疗过程和方法a', result: '诊断结果a', method: '治疗方案a' },
-        { id: 1, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
-          petWeight: '', type: '肠炎', name: '这是第二个病例', state: '接诊状态b', content: '诊疗过程和方法b', result: '诊断结果b', method: '治疗方案b' }],
+        petWeight: '', type: '口炎', name: '这是第一个病例', state: '接诊状态a', content: '诊疗过程和方法a', result: '诊断结果a', method: '治疗方案a' },
+      { id: 1, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
+        petWeight: '', type: '肠炎', name: '这是第二个病例', state: '接诊状态b', content: '诊疗过程和方法b', result: '诊断结果b', method: '治疗方案b' }],
       typeFilter: [{ text: '口炎', value: '口炎' }, { text: '肠炎', value: '肠炎' }],
       caseDialog: false,
       addDialog: false,

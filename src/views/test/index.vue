@@ -20,8 +20,9 @@
       <el-checkbox-group
         v-model="checkedTypes"
         :min="1"
-        :max="5">
-        <el-checkbox style="width: 200px" v-for="o in type" :label="o" :key="o">
+        :max="5"
+      >
+        <el-checkbox v-for="o in type" :key="o" style="width: 200px" :label="o">
           <el-tag>{{ o }}</el-tag>
         </el-checkbox>
       </el-checkbox-group>
@@ -47,7 +48,7 @@
               {{ '(' + form.resource[o].charAt(0) + ')' }}
             </span>
           </div>
-          <br/>
+          <br>
           <el-radio-group v-model="form.resource[o]">
             <div>
               <el-radio :label="form.options[0]" />
@@ -78,8 +79,8 @@
       <el-form ref="form" :model="form" label-width="80px">
         <div v-for="o in 5" :key="o" style="margin: 50px">
           <div>
-            <i v-if="form.marking[o]" class="el-icon-error" style="color: red"></i>
-            <i v-if="form.remarking[o]" class="el-icon-success" style="color: blue"></i>
+            <i v-if="form.marking[o]" class="el-icon-error" style="color: red" />
+            <i v-if="form.remarking[o]" class="el-icon-success" style="color: blue" />
             <span>
               {{ o + '. ' + form.problem[o] }}
             </span>
@@ -87,8 +88,8 @@
               {{ '(' + form.resource[o].charAt(0) + ')' }}
             </span>
           </div>
-          <br/>
-          <el-radio-group disabled v-model="form.resource[o]">
+          <br>
+          <el-radio-group v-model="form.resource[o]" disabled>
             <div>
               <el-radio :label="form.options[0]" />
             </div>

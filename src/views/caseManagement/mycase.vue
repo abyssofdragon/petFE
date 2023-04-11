@@ -19,7 +19,8 @@
             <el-image
               style="width: 100px; height: 100px"
               :src="imageurl"
-              :fit="fit"></el-image>
+              :fit="fit"
+            />
           </div>
         </el-descriptions-item>
         <el-descriptions-item label="诊疗过程和方法" :span="16">
@@ -28,7 +29,8 @@
             <el-image
               style="width: 100px; height: 100px"
               :src="imageurl"
-              :fit="fit"></el-image>
+              :fit="fit"
+            />
           </div>
         </el-descriptions-item>
         <el-descriptions-item label="诊断结果" :span="16">
@@ -37,13 +39,14 @@
             <el-image
               style="width: 100px; height: 100px"
               :src="imageurl"
-              :fit="fit"></el-image>
+              :fit="fit"
+            />
           </div>
         </el-descriptions-item>
         <el-descriptions-item label="治疗方案" :span="16">
           <div>16</div>
           <div class="videoPlayer">
-            <xg-player :url="videourl" @triggerEvent="triggerEvent" ></xg-player>
+            <xg-player :url="videourl" @triggerEvent="triggerEvent" />
           </div>
         </el-descriptions-item>
       </el-descriptions>

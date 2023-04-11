@@ -16,14 +16,15 @@
       show-overflow
       height="500"
       :row-config="{ isHover: true }"
-      :data="display"
+      :data="result"
       @cell-dblclick="cellDBLClickEvent"
     >
       <vxe-column type="seq" width="60" />
-      <vxe-column field="id" title="ID" type="html" sortable />
-      <vxe-column field="name" title="名称" type="html" sortable />
-      <vxe-column field="price" title="价格" type="html" sortable />
-      <vxe-column field="detail" title="详情" type="html" />
+      <vxe-column field="drugId" title="ID" type="html" sortable />
+      <vxe-column field="drugName" title="名称" type="html" sortable />
+      <vxe-column field="drugPrice" title="价格" type="html" sortable />
+      <vxe-column field="drugQuantity" title="数量" type="html" />
+      <vxe-column field="drugDescription" title="详情" type="html" />
       <vxe-column title="操作" width="100" show-overflow>
         <template #default="{ row }">
           <vxe-button type="text" icon="vxe-icon-edit" @click="editEvent(row)" />
@@ -105,6 +106,7 @@
 // 排序 https://vxetable.cn/v3/#/table/base/sort
 import VXETable from 'vxe-table'
 import XEUtils from 'xe-utils'
+import axios from 'axios'
 
 export default {
   data() {
@@ -135,6 +137,7 @@ export default {
         { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
         { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' }
       ],
+      result:[],
       selectRow: null,
       showEdit: false,
       formData: {
@@ -157,8 +160,20 @@ export default {
   },
   created() {
     this.searchEvent()
+    this.getDrugAll()
   },
   methods: {
+    getDrugAll() {
+      axios({
+        method: 'get',
+        url: 'http://localhost:8084/drug/all',
+        timeout: 30000
+        // data: FormDatas
+      }).then(res => {
+        this.result=res.data.data
+         console.log(111, this.result)
+      })
+    },
     visibleMethod({ data }) {
       return data.flag1 === 'Y'
     },

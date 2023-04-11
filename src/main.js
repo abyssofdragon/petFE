@@ -25,6 +25,8 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+import axios from 'axios'
+Vue.prototype.$axios = axios
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -45,9 +47,18 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
+// 给每个请求都拦截下来 添加请求的token信息
+localStorage.setItem('token', 'eyJUeXBlIjoiSnd0IiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ0ZXN0MyIsImV4cCI6MTY4MTE4ODU0MH0.WswupNZqy-mMtd6cpW5lHUo9NeP8SCm_hd2ZDdVdW8s')
+
+axios.interceptors.request.use(function(config) {
+  config.headers.Authorization = 'Bearer ' + localStorage.getItem('token')
+  return config
+})
+
 new Vue({
   el: '#app',
   router,
   store,
+  axios,
   render: h => h(App)
 })
