@@ -45,7 +45,7 @@
               {{ o + '. ' + form.problemList[o].content }}
             </span>
             <span style="float: right">
-              {{ '(' + form.problemList[o].answer + ')' }}
+              {{ '(' + form.resource[o].charAt(0) + ')' }}
             </span>
           </div>
           <br>
@@ -85,7 +85,7 @@
               {{ o + '. ' + form.problemList[o].content }}
             </span>
             <span style="float: right">
-              {{ '(' + form.resource[o].charAt(0) + ')' }}
+              {{ '(' + form.problemList[o].answer + ')' }}
             </span>
           </div>
           <br>
@@ -103,6 +103,9 @@
               <el-radio :label="form.problemList[o].optionD" />
             </div>
           </el-radio-group>
+          <div>
+            你选择的答案是{{form.resource[o]}}，正确答案是{{form.problemList[o].answer}}
+          </div>
         </div>
         <el-form-item>
           <el-button type="primary" @click="select">返回</el-button>
@@ -123,16 +126,15 @@ export default {
       showExam: false,
       showResult: false,
       score: '99',
-      type: ['犬瘟热', '犬细小病毒', '犬传染性肝炎', '犬冠状病毒', '猫泛白细胞减少症', '猫病毒性病气管炎', '皮肤真菌感染'],
+      type: ['犬瘟热', '猫感冒', '鹦鹉热', '猫病毒性鼻气管炎', '猫泛白细胞减少症'],
       checkedTypes: [],
       paperName: '',
       form: {
         problemList: [{ questionId: 1, category: '肠炎', content: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 }],
         resource: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
         // problem: ['', '第一题', '甲', '乙', '丙', '丁'],
-        options: [],
-        marking: [0, 0, 1, 0, 0, 1],
-        remarking: [0, 1, 0, 1, 1, 0]
+        marking: [0],
+        remarking: [0]
       }
     }
   },
@@ -170,6 +172,11 @@ export default {
       this.showExam = true
     },
     select() {
+      this.form.marking = [0]
+      this.form.remarking = [0]
+      this.checkedTypes = []
+      this.form.problemList = [{ questionId: 1, category: '肠炎', content: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 }]
+      this.resource = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
       this.showResult = false
       this.showCard = true
       this.showExam = false
@@ -178,6 +185,13 @@ export default {
       let data = []
       for (let i = 1; i <= 20; i++) {
         data.push({ questionId: this.form.problemList[i].questionId, userAnswer: this.form.resource[i].charAt(0) })
+        if (this.form.resource[i].charAt(0) === this.form.problemList[i].answer) {
+          this.form.marking.push(0)
+          this.form.remarking.push(1)
+        } else {
+          this.form.marking.push(1)
+          this.form.remarking.push(0)
+        }
       }
       console.log(data)
 
@@ -190,7 +204,6 @@ export default {
         console.log(res)
         this.score = res.data.data
       })
-      this.problemList = [{ questionId: 1, category: '肠炎', content: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 }]
 
       this.showCard = false
       this.showExam = false

@@ -9,7 +9,7 @@
         <el-button type="success" @click="addDialog = true">增加病例</el-button>
         <span style="float: right">
           <el-input
-            v-model="typeSearch"
+            v-model="categorySearch"
             class="input"
             placeholder="请输入内容"
             clearable
@@ -31,15 +31,15 @@
         style="width: 100%"
       >
         <el-table-column
-          prop="id"
+          prop="patientId"
           label="编号"
           width="180"
         />
         <el-table-column
-          prop="type"
+          prop="category"
           label="病种"
           width="180"
-          :filters="typeFilter"
+          :filters="categoryFilter"
           :filter-method="filterType"
         />
         <el-table-column type="expand">
@@ -49,13 +49,13 @@
                 <span>{{ props.row.state }}</span>
               </el-form-item>
               <el-form-item label="诊疗过程和方法">
-                <span>{{ props.row.content }}</span>
+                <span>{{ props.row.diagnoseProcess }}</span>
               </el-form-item>
               <el-form-item label="诊断结果">
                 <span>{{ props.row.result }}</span>
               </el-form-item>
               <el-form-item label="治疗方案">
-                <span>{{ props.row.method }}</span>
+                <span>{{ props.row.treatment }}</span>
               </el-form-item>
             </el-form>
           </template>
@@ -70,8 +70,8 @@
           width="180"
         >
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" circle @click="modifyD(scope.$index)" />
-            <el-button type="danger" icon="el-icon-delete" circle @click="deleteD(scope.$index)" />
+            <el-button type="primary" icon="el-icon-edit" circle @click="modifyD(scope.row.patientId)" />
+            <el-button type="danger" icon="el-icon-delete" circle @click="deleteD(scope.row.patientId)" />
           </template>
         </el-table-column>
       </el-table>
@@ -102,7 +102,7 @@
           <el-input v-model="addCase.breed" />
         </el-form-item>
         <el-form-item label="病种">
-          <el-input v-model="addCase.type" />
+          <el-input v-model="addCase.category" />
         </el-form-item>
         <el-form-item label="年龄">
           <el-input v-model="addCase.petAge" />
@@ -123,13 +123,13 @@
           <el-input v-model="addCase.state" type="textarea" autosize />
         </el-form-item>
         <el-form-item label="诊疗过程和方法">
-          <el-input v-model="addCase.content" type="textarea" autosize />
+          <el-input v-model="addCase.diagnoseProcess" type="textarea" autosize />
         </el-form-item>
         <el-form-item label="诊断结果">
           <el-input v-model="addCase.result" type="textarea" autosize />
         </el-form-item>
         <el-form-item label="治疗方案">
-          <el-input v-model="addCase.method" type="textarea" autosize />
+          <el-input v-model="addCase.treatment" type="textarea" autosize />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="addNewCase">立即增加</el-button>
@@ -163,7 +163,7 @@
           <el-input v-model="modifyCase.breed" />
         </el-form-item>
         <el-form-item label="病种">
-          <el-input v-model="modifyCase.type" />
+          <el-input v-model="modifyCase.category" />
         </el-form-item>
         <el-form-item label="年龄">
           <el-input v-model="modifyCase.petAge" />
@@ -214,13 +214,13 @@
           <div slot="tip" class="el-upload__tip">为接诊状态上传视频</div>
         </el-upload>
         <el-form-item label="诊疗过程和方法">
-          <el-input v-model="modifyCase.content" type="textarea" autosize />
+          <el-input v-model="modifyCase.diagnoseProcess" type="textarea" autosize />
         </el-form-item>
         <el-form-item label="诊断结果">
           <el-input v-model="modifyCase.result" type="textarea" autosize />
         </el-form-item>
         <el-form-item label="治疗方案">
-          <el-input v-model="modifyCase.method" type="textarea" autosize />
+          <el-input v-model="modifyCase.treatment" type="textarea" autosize />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="modifyOldCase">立即修改</el-button>
@@ -245,28 +245,42 @@
 </template>
 
 <script>
+import axios from 'axios'
 
 export default {
   data() {
     return {
-      caseList: [{ id: 0, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
-        petWeight: '', type: '口炎', name: '这是第一个病例', state: '接诊状态a', content: '诊疗过程和方法a', result: '诊断结果a', method: '治疗方案a' },
-      { id: 1, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
-        petWeight: '', type: '肠炎', name: '这是第二个病例', state: '接诊状态b', content: '诊疗过程和方法b', result: '诊断结果b', method: '治疗方案b' }],
-      typeFilter: [{ text: '口炎', value: '口炎' }, { text: '肠炎', value: '肠炎' }],
+      caseList: [{ patientId: 0, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
+        petWeight: '', category: '口炎', name: '这是第一个病例', state: '接诊状态a', diagnoseProcess: '诊疗过程和方法a', result: '诊断结果a', treatment: '治疗方案a' },
+      { patientId: 1, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
+        petWeight: '', category: '肠炎', name: '这是第二个病例', state: '接诊状态b', diagnoseProcess: '诊疗过程和方法b', result: '诊断结果b', treatment: '治疗方案b' }],
+      categoryFilter: [{ text: '口炎', value: '口炎' }, { text: '肠炎', value: '肠炎' }],
       caseDialog: false,
       addDialog: false,
       modifyDialog: false,
-      addCase: { id: 0, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
-        petWeight: '', type: '', name: '', state: '', content: '', result: '', method: '' },
-      modifyCase: { id: 0, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
-        petWeight: '', type: '', name: '', state: '', content: '', result: '', method: '' },
-      typeSearch: '',
+      addCase: { patientId: 0, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
+        petWeight: '', category: '', name: '', state: '', diagnoseProcess: '', result: '', treatment: '' },
+      modifyCase: { patientId: 0, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
+        petWeight: '', category: '', name: '', state: '', diagnoseProcess: '', result: '', treatment: '' },
+      categorySearch: '',
       caseSearch: '',
       index: 0
     }
   },
+  created() {
+    this.getAllCase()
+  },
   methods: {
+    getAllCase() {
+      axios({
+        method: 'get',
+        url: 'http://localhost:8084/patient/all',
+        timeout: 30000
+      }).then(res => {
+        console.log(res)
+        this.caseList = res.data.data
+      })
+    },
     deleteD(index) {
       this.index = index
       this.caseDialog = true
@@ -282,13 +296,13 @@ export default {
     },
     modifyOldCase() {
       this.caseList[this.index] = this.modifyCase
-      this.modifyCase = { id: 0, type: '', name: '', state: '', content: '', result: '', method: '' }
+      this.modifyCase = { patientId: 0, type: '', name: '', state: '', diagnoseProcess: '', result: '', treatment: '' }
       this.modifyDialog = false
     },
     addNewCase() {
-      this.addCase.id = this.caseList[this.caseList.length - 1].id + 1
+      this.addCase.patientId = this.caseList[this.caseList.length - 1].patientId + 1
       this.caseList.push(this.addCase)
-      this.addCase = { id: 0, type: '', name: '', state: '', content: '', result: '', method: '' }
+      this.addCase = { patientId: 0, type: '', name: '', state: '', diagnoseProcess: '', result: '', treatment: '' }
       this.addDialog = false
     },
     filterType(value, row) {
