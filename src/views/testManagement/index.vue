@@ -9,12 +9,12 @@
         <el-button type="success" @click="addDialog = true">增加试题</el-button>
         <span style="float: right">
           <el-input
-            v-model="typeSearch"
+            v-model="categorySearch"
             class="input"
             placeholder="请输入内容"
             clearable
           />
-          <el-button>筛选病种</el-button>
+          <el-button @click="searchPrbByCtg">筛选病种</el-button>
         </span>
         <span style="float: right">
           <el-input
@@ -41,7 +41,7 @@
           prop="category"
           label="病种"
           width="180"
-          :filters="typeFilter"
+          :filters="categoryFilter"
           :filter-method="filterType"
         />
 
@@ -84,8 +84,8 @@
           width="180"
         >
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" circle @click="modifyD(scope.$index)" />
-            <el-button type="danger" icon="el-icon-delete" circle @click="deleteD(scope.$index)" />
+            <el-button type="primary" icon="el-icon-edit" circle @click="modifyD(scope.row.questionId)" />
+            <el-button type="danger" icon="el-icon-delete" circle @click="deleteD(scope.row.questionId)" />
           </template>
 
         </el-table-column>
@@ -108,10 +108,10 @@
     >
       <el-form ref="form" :model="problem" label-width="80px">
         <el-form-item label="病种">
-          <el-input v-model="problem.type" />
+          <el-input v-model="problem.category" />
         </el-form-item>
         <el-form-item label="题目">
-          <el-input v-model="problem.topic" />
+          <el-input v-model="problem.content" />
         </el-form-item>
         <el-form-item label="选项A">
           <el-input v-model="problem.optionA" />
@@ -145,10 +145,10 @@
     >
       <el-form ref="form" :model="problem" label-width="80px">
         <el-form-item label="病种">
-          <el-input v-model="problem.type" />
+          <el-input v-model="problem.category" />
         </el-form-item>
         <el-form-item label="题目">
-          <el-input v-model="problem.topic" />
+          <el-input v-model="problem.content" />
         </el-form-item>
         <el-form-item label="选项A">
           <el-input v-model="problem.optionA" />
@@ -191,32 +191,31 @@
 
 <script>
 import axios from 'axios'
-
 export default {
   data() {
     return {
-      problemList: [{ id: 0, type: '口炎', topic: '这是第一个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'A', score: 2 },
-        { id: 1, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
-        { id: 2, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
-        { id: 3, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
-        { id: 4, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
-        { id: 5, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
-        { id: 6, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
-        { id: 7, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
-        { id: 8, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
-        { id: 9, type: '肠炎', topic: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 }
+      problemList: [{ questionId: 0, category: '口炎', content: '这是第一个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'A', score: 2 },
+        { questionId: 1, category: '肠炎', content: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
+        { questionId: 2, category: '肠炎', content: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
+        { questionId: 3, category: '肠炎', content: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
+        { questionId: 4, category: '肠炎', content: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
+        { questionId: 5, category: '肠炎', content: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
+        { questionId: 6, category: '肠炎', content: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
+        { questionId: 7, category: '肠炎', content: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
+        { questionId: 8, category: '肠炎', content: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 },
+        { questionId: 9, category: '肠炎', content: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 }
       ],
-      typeFilter: [{ text: '犬瘟热', value: '犬瘟热' }, { text: '猫感冒', value: '猫感冒' }, { text: '鹦鹉热', value: '鹦鹉热' },
+      categoryFilter: [{ text: '犬瘟热', value: '犬瘟热' }, { text: '猫感冒', value: '猫感冒' }, { text: '鹦鹉热', value: '鹦鹉热' },
         { text: '猫病毒性鼻气管炎', value: '猫病毒性鼻气管炎' }, { text: '猫泛白细胞减少症', value: '猫泛白细胞减少症' }],
       currentPage: 1,
-      pagesize: 5,
+      pagesize: 10,
       total: 10,
       deleteDialog: false,
       addDialog: false,
       modifyDialog: false,
-      typeSearch: '',
+      categorySearch: '',
       problemSearch: '',
-      problem: { id: 0, type: '', topic: '', optionA: '', optionB: '', optionC: '', optionD: '', answer: '', score: 0 },
+      problem: { questionId: 0, category: '', content: '', optionA: '', optionB: '', optionC: '', optionD: '', answer: '', score: 5 },
       index: 0
     }
   },
@@ -225,7 +224,6 @@ export default {
   },
   methods: {
     getAllProblem() {
-      console.log('111: ' + localStorage.getItem('token'))
       axios({
         method: 'get',
         url: 'http://localhost:8084/question/all',
@@ -237,14 +235,27 @@ export default {
       })
     },
     searchPrbByCtn() {
-      console.log('111: ' + Storage.getItem('token'))
-      const FormData = new FormData()
-      FormData.append('content', this.problemSearch)
       axios({
-        method: 'post',
+        method: 'get',
         url: 'http://localhost:8084/question/searchByContent',
         timeout: 30000,
-        FormData
+        params: {
+          content: this.problemSearch
+        }
+      }).then(res => {
+        console.log(res)
+        this.problemList = res.data.data
+        this.total = this.problemList.length
+      })
+    },
+    searchPrbByCtg() {
+      axios({
+        method: 'get',
+        url: 'http://localhost:8084/question/searchByCategory',
+        timeout: 30000,
+        params: {
+          category: this.categorySearch
+        }
       }).then(res => {
         console.log(res)
         this.problemList = res.data.data
@@ -257,22 +268,54 @@ export default {
     },
     modifyD(index) {
       this.index = index
-      this.problem = this.problemList[index]
+      this.problem = this.problemList.find(x => x.questionId === index)
       this.modifyDialog = true
     },
     modifyProblem() {
-      this.problemList[this.index] = this.problem
-      this.problem = { id: 0, type: '', topic: '', options: '', answer: '', score: 0 }
+      const data = this.problem
+      // this.problemList[this.index] = this.problem
+      axios({
+        method: 'put',
+        url: 'http://localhost:8084/question/update',
+        timeout: 30000,
+        data
+      }).then(res => {
+        console.log(res)
+        this.getAllProblem()
+      })
+
+      this.problem = { questionId: 0, category: '', content: '', options: '', answer: '', score: 0 }
       this.modifyDialog = false
     },
     deleteProblem() {
-      this.problemList.splice(this.index, 1)
+      // console.log(this.index)
+      // this.problemList.splice(this.index, 1)
+      axios({
+        method: 'delete',
+        url: 'http://localhost:8084/question/delete/' + this.index,
+        timeout: 30000
+      }).then(res => {
+        console.log(res)
+        this.getAllProblem()
+      })
+
       this.deleteDialog = false
     },
     addProblem() {
-      this.problem.id = this.problemList[this.problemList.length - 1].id + 1
-      this.problemList.push(this.problem)
-      this.problem = { id: 0, type: '', topic: '', options: '', answer: '', score: 0 }
+      // this.problem.id = this.problemList[this.problemList.length - 1].id + 1
+      // this.problemList.push(this.problem)
+      const data = this.problem
+      axios({
+        method: 'post',
+        url: 'http://localhost:8084/question/add',
+        timeout: 30000,
+        data
+      }).then(res => {
+        console.log(res)
+        this.getAllProblem()
+      })
+
+      this.problem = { questionId: 0, category: '', content: '', options: '', answer: '', score: 0 }
       this.addDialog = false
     },
     filterType(value, row) {

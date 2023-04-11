@@ -39,28 +39,28 @@
         >返回</el-button>
       </div>
       <el-form ref="form" :model="form" label-width="80px">
-        <div v-for="o in 5" :key="o" style="margin: 50px">
+        <div v-for="o in 20" :key="o" style="margin: 50px">
           <div>
             <span>
-              {{ o + '. ' + form.problem[o] }}
+              {{ o + '. ' + form.problemList[o].content }}
             </span>
             <span style="float: right">
-              {{ '(' + form.resource[o].charAt(0) + ')' }}
+              {{ '(' + form.problemList[o].answer + ')' }}
             </span>
           </div>
           <br>
           <el-radio-group v-model="form.resource[o]">
             <div>
-              <el-radio :label="form.options[0]" />
+              <el-radio :label="form.problemList[o].optionA" />
             </div>
             <div>
-              <el-radio :label="form.options[1]" />
+              <el-radio :label="form.problemList[o].optionB" />
             </div>
             <div>
-              <el-radio :label="form.options[2]" />
+              <el-radio :label="form.problemList[o].optionC" />
             </div>
             <div>
-              <el-radio :label="form.options[3]" />
+              <el-radio :label="form.problemList[o].optionD" />
             </div>
           </el-radio-group>
         </div>
@@ -77,12 +77,12 @@
         <div class="score">{{ '考试成绩: ' + score }}</div>
       </div>
       <el-form ref="form" :model="form" label-width="80px">
-        <div v-for="o in 5" :key="o" style="margin: 50px">
+        <div v-for="o in 20" :key="o" style="margin: 50px">
           <div>
             <i v-if="form.marking[o]" class="el-icon-error" style="color: red" />
             <i v-if="form.remarking[o]" class="el-icon-success" style="color: blue" />
             <span>
-              {{ o + '. ' + form.problem[o] }}
+              {{ o + '. ' + form.problemList[o].content }}
             </span>
             <span style="float: right">
               {{ '(' + form.resource[o].charAt(0) + ')' }}
@@ -91,16 +91,16 @@
           <br>
           <el-radio-group v-model="form.resource[o]" disabled>
             <div>
-              <el-radio :label="form.options[0]" />
+              <el-radio :label="form.problemList[o].optionA" />
             </div>
             <div>
-              <el-radio :label="form.options[1]" />
+              <el-radio :label="form.problemList[o].optionB" />
             </div>
             <div>
-              <el-radio :label="form.options[2]" />
+              <el-radio :label="form.problemList[o].optionC" />
             </div>
             <div>
-              <el-radio :label="form.options[3]" />
+              <el-radio :label="form.problemList[o].optionD" />
             </div>
           </el-radio-group>
         </div>
@@ -113,6 +113,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data() {
     return {
@@ -125,9 +127,10 @@ export default {
       checkedTypes: [],
       paperName: '',
       form: {
-        options: ['A.选项a', 'B.选项b', 'C.选项c', 'D.选项d'],
-        problem: ['', '第一题', '甲', '乙', '丙', '丁'],
-        resource: ['', 'B.选项b', 'A.选项a', 'D.选项d', '', ''],
+        problemList: [{ questionId: 1, category: '肠炎', content: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 }],
+        resource: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+        // problem: ['', '第一题', '甲', '乙', '丙', '丁'],
+        options: [],
         marking: [0, 0, 1, 0, 0, 1],
         remarking: [0, 1, 0, 1, 1, 0]
       }
@@ -135,6 +138,25 @@ export default {
   },
   methods: {
     enterExam() {
+      const data = this.checkedTypes
+      let oo
+      axios({
+        method: 'post',
+        url: 'http://localhost:8084/question/generate',
+        timeout: 30000,
+        data
+      }).then(res => {
+        oo = res.data.data
+        this.form.problemList = this.form.problemList.concat(oo)
+
+        for (let i = 1; i <= 21; i++) {
+          this.form.problemList[i].optionA = 'A. ' + oo[i - 1].optionA
+          this.form.problemList[i].optionB = 'B. ' + oo[i - 1].optionB
+          this.form.problemList[i].optionC = 'C. ' + oo[i - 1].optionC
+          this.form.problemList[i].optionD = 'D. ' + oo[i - 1].optionD
+        }
+      })
+
       this.paperName = '根据'
       for (let i = 0; i < this.checkedTypes.length; i++) {
         this.paperName = this.paperName + this.checkedTypes[i]
@@ -153,6 +175,23 @@ export default {
       this.showExam = false
     },
     onSubmit() {
+      let data = []
+      for (let i = 1; i <= 20; i++) {
+        data.push({ questionId: this.form.problemList[i].questionId, userAnswer: this.form.resource[i].charAt(0) })
+      }
+      console.log(data)
+
+      axios({
+        method: 'post',
+        url: 'http://localhost:8084/question/score',
+        timeout: 30000,
+        data
+      }).then(res => {
+        console.log(res)
+        this.score = res.data.data
+      })
+      this.problemList = [{ questionId: 1, category: '肠炎', content: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 }]
+
       this.showCard = false
       this.showExam = false
       this.showResult = true
