@@ -4,7 +4,7 @@
     <vxe-toolbar>
       <template #buttons>
         <vxe-button icon="vxe-icon-square-plus" @click="insertEvent()">新增</vxe-button>
-        <vxe-input v-model="filterName1" type="search" placeholder="试试全表搜索" @keyup="searchEvent" />
+        <vxe-input v-model="filterName" type="search" placeholder="搜索" @keyup="getDrugSearchByName" />
       </template>
     </vxe-toolbar>
     <vxe-table
@@ -87,9 +87,15 @@
               <vxe-input v-model="data.drugQuantity" type="number" placeholder="请输入数量" />
             </template>
           </vxe-form-item>
-          <vxe-form-item field="drugDescription" title="详情" :span="24" :item-render="{}" :title-suffix="{message: '详情', icon: 'vxe-icon-question-circle-fill'}">
+          <vxe-form-item
+            field="drugDescription"
+            title="详情"
+            :span="24"
+            :item-render="{}"
+            :title-suffix="{ message: '详情', icon: 'vxe-icon-question-circle-fill' }"
+          >
             <template #default="{ data }">
-              <vxe-textarea v-model="data.drugDescription" :autosize="{minRows: 2, maxRows: 4}" />
+              <vxe-textarea v-model="data.drugDescription" :autosize="{ minRows: 2, maxRows: 4 }" />
             </template>
           </vxe-form-item>
           <vxe-form-item align="center" title-align="left" :span="24">
@@ -111,7 +117,6 @@
 // 筛选 https://vxetable.cn/v3/#/table/base/filter
 // 排序 https://vxetable.cn/v3/#/table/base/sort
 import VXETable from 'vxe-table'
-import XEUtils from 'xe-utils'
 import axios from 'axios'
 
 export default {
@@ -125,7 +130,7 @@ export default {
       },
       list: [],
       display: [],
-      filterName1: '',
+      filterName: '',
       submitLoading: false,
       result: [],
       selectRow: null,
@@ -133,13 +138,16 @@ export default {
       formData: {
       },
       formRules: {
-        name: [
+        drugName: [
           { required: true, message: '请输入名称' }
         ],
-        price: [
+        drugPrice: [
           { required: true, message: '请输入价格' }
         ],
-        detail: [
+        drugQuantity: [
+          { required: true, message: '请输入数量' }
+        ],
+        drugDescription: [
           { required: true, message: '请输入详情' }
         ]
       }
@@ -147,7 +155,6 @@ export default {
   },
   created() {
     this.getDrugAll()
-    this.searchEvent()
   },
   methods: {
     getDrugAll() {
@@ -196,6 +203,18 @@ export default {
         this.getDrugAll()
       })
     },
+    getDrugSearchByName() {
+      axios({
+        method: 'get',
+        url: 'http://localhost:8084/drug/searchByName/?drugName=' + this.filterName,
+        timeout: 30000
+        // data: FormDatas
+      }).then(res => {
+        this.result = res.data.data
+        this.tablePage.totalResult = this.result.length
+        this.display = this.result.slice((this.tablePage.currentPage - 1) * this.tablePage.pageSize, this.tablePage.currentPage * this.tablePage.pageSize)
+      })
+    },
     visibleMethod({ data }) {
       return data.flag1 === 'Y'
     },
@@ -226,7 +245,6 @@ export default {
     submitEvent() {
       this.submitLoading = true
       setTimeout(() => {
-        const $table = this.$refs.xTable
         this.submitLoading = false
         this.showEdit = false
         if (this.selectRow) {
@@ -259,9 +277,9 @@ export default {
 }
 </script>
 
-    <style>
-    .keyword-lighten {
-      color: #000;
-      background-color: #FFFF00;
-    }
-    </style>
+<style>
+.keyword-lighten {
+  color: #000;
+  background-color: #FFFF00;
+}
+</style>
