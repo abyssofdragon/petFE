@@ -1,8 +1,9 @@
 import request from '@/utils/request'
+import axios from 'axios'
 
 export function login(data) {
   return request({
-    url: '/vue-admin-template/user/login',
+    url: 'http://localhost:8084/user/login',
     method: 'post',
     data
   })
