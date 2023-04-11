@@ -16,7 +16,7 @@
       show-overflow
       height="500"
       :row-config="{ isHover: true }"
-      :data="result"
+      :data="display"
       @cell-dblclick="cellDBLClickEvent"
     >
       <vxe-column type="seq" width="60" />
@@ -72,24 +72,30 @@
             :span="24"
             :title-prefix="{ icon: 'vxe-icon-comment' }"
           />
-          <vxe-form-item field="name" title="名称" :span="12" :item-render="{}">
+          <vxe-form-item field="drugName" title="名称" :span="8" :item-render="{}">
             <template #default="{ data }">
-              <vxe-input v-model="data.name" placeholder="请输入名称" />
+              <vxe-input v-model="data.drugName" placeholder="请输入名称" />
             </template>
           </vxe-form-item>
-          <vxe-form-item field="price" title="价格" :span="12" :item-render="{}">
+          <vxe-form-item field="drugPrice" title="价格" :span="8" :item-render="{}">
             <template #default="{ data }">
-              <vxe-input v-model="data.price" type="number" placeholder="请输入价格" />
+              <vxe-input v-model="data.drugPrice" type="number" placeholder="请输入价格" />
             </template>
           </vxe-form-item>
-          <vxe-form-item field="detail" title="详情" :span="24" :item-render="{}" :title-suffix="{message: '详情', icon: 'vxe-icon-question-circle-fill'}">
+          <vxe-form-item field="drugQuantity" title="数量" :span="8" :item-render="{}">
             <template #default="{ data }">
-              <vxe-textarea v-model="data.detail" :autosize="{minRows: 2, maxRows: 4}" />
+              <vxe-input v-model="data.drugQuantity" type="number" placeholder="请输入数量" />
+            </template>
+          </vxe-form-item>
+          <vxe-form-item field="drugDescription" title="详情" :span="24" :item-render="{}" :title-suffix="{message: '详情', icon: 'vxe-icon-question-circle-fill'}">
+            <template #default="{ data }">
+              <vxe-textarea v-model="data.drugDescription" :autosize="{minRows: 2, maxRows: 4}" />
             </template>
           </vxe-form-item>
           <vxe-form-item align="center" title-align="left" :span="24">
             <template #default>
-              <vxe-button type="submit">提交</vxe-button>
+              <vxe-button v-if="selectRow" type="submit" @click="putDrugUpdate">修改</vxe-button>
+              <vxe-button v-else type="submit" @click="postDrugAdd">新增</vxe-button>
               <vxe-button type="reset">重置</vxe-button>
             </template>
           </vxe-form-item>
@@ -121,29 +127,10 @@ export default {
       display: [],
       filterName1: '',
       submitLoading: false,
-      initialTableData: [
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' }
-      ],
       result: [],
       selectRow: null,
       showEdit: false,
       formData: {
-        name: '示例',
-        priceL: '0',
-        detail: '示例'
       },
       formRules: {
         name: [
@@ -159,8 +146,8 @@ export default {
     }
   },
   created() {
-    this.searchEvent()
     this.getDrugAll()
+    this.searchEvent()
   },
   methods: {
     getDrugAll() {
@@ -171,7 +158,42 @@ export default {
         // data: FormDatas
       }).then(res => {
         this.result = res.data.data
-        console.log(111, this.result)
+        this.tablePage.totalResult = this.result.length
+        this.display = this.result.slice((this.tablePage.currentPage - 1) * this.tablePage.pageSize, this.tablePage.currentPage * this.tablePage.pageSize)
+      })
+    },
+    putDrugUpdate() {
+      const data = this.formData
+      axios({
+        method: 'put',
+        url: 'http://localhost:8084/drug/update',
+        timeout: 30000,
+        data
+        // data: FormDatas
+      }).then(res => {
+        this.getDrugAll()
+      })
+    },
+    postDrugAdd() {
+      const data = this.formData
+      axios({
+        method: 'post',
+        url: 'http://localhost:8084/drug/add',
+        timeout: 30000,
+        data
+        // data: FormDatas
+      }).then(res => {
+        this.getDrugAll()
+      })
+    },
+    deleteDrugDelete(row) {
+      axios({
+        method: 'delete',
+        url: 'http://localhost:8084/drug/delete/' + row.drugId,
+        timeout: 30000
+        // data: FormDatas
+      }).then(res => {
+        this.getDrugAll()
       })
     },
     visibleMethod({ data }) {
@@ -182,18 +204,21 @@ export default {
     },
     editEvent(row) {
       this.formData = {
-        name: row.name,
-        price: row.price,
-        detail: row.detail
+        drugId: row.drugId,
+        drugName: row.drugName,
+        drugPrice: row.drugPrice,
+        drugQuantity: row.drugQuantity,
+        drugDescription: row.drugDescription
       }
       this.selectRow = row
       this.showEdit = true
     },
     insertEvent() {
       this.formData = {
-        name: '',
-        price: '',
-        detail: ''
+        drugName: '',
+        drugPrice: '',
+        drugQuantity: '',
+        drugDescription: ''
       }
       this.selectRow = null
       this.showEdit = true
@@ -206,42 +231,24 @@ export default {
         this.showEdit = false
         if (this.selectRow) {
           VXETable.modal.message({ content: '保存成功', status: 'success' })
-          Object.assign(this.selectRow, this.formData)
+          // Object.assign(this.selectRow, this.formData)
         } else {
           VXETable.modal.message({ content: '新增成功', status: 'success' })
-          $table.insert(this.formData)
+          // $table.insert(this.formData)
         }
       }, 500)
     },
     async removeEvent(row) {
       const type = await VXETable.modal.confirm('您确定要删除该数据?')
-      const $table = this.$refs.xTable
+      // const $table = this.$refs.xTable
       if (type === 'confirm') {
-        $table.remove(row)
+        // $table.remove(row)
+        this.deleteDrugDelete(row)
       }
     },
     searchEvent() {
-      this.loading = true
-      const filterName = XEUtils.toValueString(this.filterName1).trim().toLowerCase()
-      if (filterName) {
-        const filterRE = new RegExp(filterName, 'gi')
-        const searchProps = ['name', 'detail']
-        const rest = this.initialTableData.filter(item => searchProps.some(key => XEUtils.toValueString(item[key]).toLowerCase().indexOf(filterName) > -1))
-        this.list = rest.map(row => {
-          const item = Object.assign({}, row)
-          searchProps.forEach(key => {
-            item[key] = XEUtils.toValueString(item[key]).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
-          })
-          return item
-        })
-      } else {
-        this.list = this.initialTableData
-      }
-      console.log(1111, this.list)
-      this.loading = false
-      this.tablePage.totalResult = this.list.length
-      this.display = this.list.slice((this.tablePage.currentPage - 1) * this.tablePage.pageSize, this.tablePage.currentPage * this.tablePage.pageSize)
-      console.log(1111, this.display)
+      this.tablePage.totalResult = this.result.length
+      this.display = this.result.slice((this.tablePage.currentPage - 1) * this.tablePage.pageSize, this.tablePage.currentPage * this.tablePage.pageSize)
     },
     handlePageChange({ currentPage, pageSize }) {
       this.tablePage.currentPage = currentPage

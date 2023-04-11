@@ -2,7 +2,7 @@ import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 import axios from 'axios'
-import api from "@/store/modules/api";
+import api from '@/store/modules/api'
 
 const getDefaultState = () => {
   return {
