@@ -14,7 +14,7 @@
             placeholder="请输入内容"
             clearable
           />
-          <el-button>筛选病种</el-button>
+          <el-button @click="searchByCtg">筛选病种</el-button>
         </span>
         <span style="float: right">
           <el-input
@@ -23,7 +23,7 @@
             placeholder="请输入内容"
             clearable
           />
-          <el-button>搜索病例</el-button>
+          <el-button @click="searchByCase">搜索病例</el-button>
         </span>
       </div>
       <el-table
@@ -183,31 +183,31 @@
         <el-form-item label="接诊状态">
           <el-input v-model="modifyCase.state" type="textarea" autosize />
         </el-form-item>
+        <!--          :on-preview="handlePreview"-->
+        <!--          :on-remove="handleRemove"-->
+        <!--          :before-remove="beforeRemove"-->
+        <!--          :on-exceed="handleExceed"-->
         <el-upload
           class="upload-demo"
           action="https://jsonplaceholder.typicode.com/posts/"
           style="margin-left: 120px; display: inline-block"
-          :on-preview="handlePreview"
-          :on-remove="handleRemove"
-          :before-remove="beforeRemove"
           multiple
           :limit="3"
-          :on-exceed="handleExceed"
           :file-list="imageList"
         >
           <el-button size="small" type="primary">上传图片</el-button>
           <div slot="tip" class="el-upload__tip">为接诊状态上传图片</div>
         </el-upload>
+        <!--          :on-preview="handlePreview"-->
+        <!--          :on-remove="handleRemove"-->
+        <!--          :before-remove="beforeRemove"-->
+        <!--          :on-exceed="handleExceed"-->
         <el-upload
           class="upload-demo"
           action="https://jsonplaceholder.typicode.com/posts/"
           style="margin-left: 120px; display: inline-block"
-          :on-preview="handlePreview"
-          :on-remove="handleRemove"
-          :before-remove="beforeRemove"
           multiple
           :limit="3"
-          :on-exceed="handleExceed"
           :file-list="videoList"
         >
           <el-button size="small" type="primary">上传视频</el-button>
@@ -264,7 +264,9 @@ export default {
         petWeight: '', category: '', name: '', state: '', diagnoseProcess: '', result: '', treatment: '' },
       categorySearch: '',
       caseSearch: '',
-      index: 0
+      index: 0,
+      imageList: [],
+      videoList: []
     }
   },
   created() {
@@ -281,28 +283,85 @@ export default {
         this.caseList = res.data.data
       })
     },
+    searchByCase() {
+      axios({
+        method: 'get',
+        url: 'http://localhost:8084/patient/searchByName',
+        timeout: 30000,
+        params: {
+          name: this.categorySearch
+        }
+      }).then(res => {
+        console.log(res)
+        this.caseList = res.data.data
+        // this.total = this.problemList.length
+      })
+    },
+    searchByCtg() {
+      axios({
+        method: 'get',
+        url: 'http://localhost:8084/question/searchByCategory',
+        timeout: 30000,
+        params: {
+          category: this.categorySearch
+        }
+      }).then(res => {
+        console.log(res)
+        this.problemList = res.data.data
+        this.total = this.problemList.length
+      })
+    },
     deleteD(index) {
       this.index = index
       this.caseDialog = true
     },
     modifyD(index) {
       this.index = index
-      this.modifyCase = this.caseList[index]
+      this.modifyCase = this.caseList.find(x => x.patientId === index)
       this.modifyDialog = true
     },
     deleteCase() {
-      this.caseList.splice(this.index, 1)
+      // this.caseList.splice(this.index, 1)
+      axios({
+        method: 'delete',
+        url: 'http://localhost:8084/patient/delete/' + this.index,
+        timeout: 30000
+      }).then(res => {
+        console.log(res)
+        this.getAllCase()
+      })
       this.caseDialog = false
     },
     modifyOldCase() {
-      this.caseList[this.index] = this.modifyCase
+      // this.caseList[this.index] = this.modifyCase
+      const data = this.modifyCase
+      axios({
+        method: 'put',
+        url: 'http://localhost:8084/patient/update',
+        timeout: 30000,
+        data
+      }).then(res => {
+        console.log(res)
+        this.getAllCase()
+      })
       this.modifyCase = { patientId: 0, type: '', name: '', state: '', diagnoseProcess: '', result: '', treatment: '' }
       this.modifyDialog = false
     },
     addNewCase() {
-      this.addCase.patientId = this.caseList[this.caseList.length - 1].patientId + 1
-      this.caseList.push(this.addCase)
-      this.addCase = { patientId: 0, type: '', name: '', state: '', diagnoseProcess: '', result: '', treatment: '' }
+      const data = this.addCase
+      axios({
+        method: 'post',
+        url: 'http://localhost:8084/patient/add',
+        timeout: 30000,
+        data
+      }).then(res => {
+        console.log(res)
+        this.getAllCase()
+      })
+      // this.addCase.patientId = this.caseList[this.caseList.length - 1].patientId + 1
+      // this.caseList.push(this.addCase)
+      this.addCase = { patientId: 0, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
+        petWeight: '', category: '', name: '', state: '', diagnoseProcess: '', result: '', treatment: '' }
       this.addDialog = false
     },
     filterType(value, row) {

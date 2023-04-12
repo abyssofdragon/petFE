@@ -41,7 +41,8 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-button :loading="loading" type="primary" style="width:30%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-button :loading="loading" type="primary" style="width:30%;margin-bottom:30px;float: right" @click="registerDialog = true">Register</el-button>
 
       <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
@@ -49,12 +50,36 @@
       </div>
 
     </el-form>
+    <el-dialog
+      title="注册用户"
+      :visible.sync="registerDialog"
+      width="30%"
+    >
+      <el-form ref="form" :model="userInfo" label-width="80px">
+        <el-form-item label="用户名">
+          <el-input v-model="userInfo.userName" />
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input v-model="userInfo.password" />
+        </el-form-item>
+        <el-form-item label="性别">
+          <el-input v-model="userInfo.gender" />
+        </el-form-item>
+        <el-form-item label="年龄">
+          <el-input v-model="userInfo.age" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="handleRegister">注册</el-button>
+          <el-button @click="registerDialog = false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { validUsername } from '@/utils/validate'
-import axios from 'axios'
+import api from "@/store/modules/api";
 
 export default {
   name: 'Login',
@@ -85,7 +110,9 @@ export default {
       },
       loading: false,
       passwordType: 'password',
-      redirect: undefined
+      redirect: undefined,
+      registerDialog: false,
+      userInfo: { userName: '', password: '', gender: '', age: '' }
     }
   },
   watch: {
@@ -122,6 +149,24 @@ export default {
           return false
         }
       })
+    },
+    handleRegister() {
+      api({
+        method: 'post',
+        url: 'http://localhost:8084/user/register',
+        timeout: 30000,
+        params: {
+          userName: this.userInfo.userName,
+          password: this.userInfo.password,
+          gender: this.userInfo.gender,
+          age: this.userInfo.age
+        }
+      }).then(res => {
+        console.log(res)
+      })
+
+      this.userInfo = { userName: '', password: '', gender: '', age: '' }
+      this.registerDialog = false
     }
   }
 }
