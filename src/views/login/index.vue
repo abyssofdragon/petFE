@@ -79,7 +79,7 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
-import api from "@/store/modules/api";
+import api from '@/store/modules/api'
 
 export default {
   name: 'Login',

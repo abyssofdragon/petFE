@@ -104,7 +104,7 @@
             </div>
           </el-radio-group>
           <div>
-            你选择的答案是{{form.resource[o]}}，正确答案是{{form.problemList[o].answer}}
+            你选择的答案是{{ form.resource[o] }}，正确答案是{{ form.problemList[o].answer }}
           </div>
         </div>
         <el-form-item>
@@ -182,7 +182,7 @@ export default {
       this.showExam = false
     },
     onSubmit() {
-      let data = []
+      const data = []
       for (let i = 1; i <= 20; i++) {
         data.push({ questionId: this.form.problemList[i].questionId, userAnswer: this.form.resource[i].charAt(0) })
         if (this.form.resource[i].charAt(0) === this.form.problemList[i].answer) {
