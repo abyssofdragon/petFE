@@ -18,9 +18,9 @@
       @cell-dblclick="cellDBLClickEvent"
     >
       <vxe-column type="seq" width="60" />
-      <vxe-column field="id" title="用户ID" type="html" sortable />
-      <vxe-column field="name" title="用户名" type="html" sortable />
-      <vxe-column field="authority" title="用户权限" type="html" :formatter="formatterAuthority" :filters="[{label: '实习生', value: '1'}, {label: '管理员', value: '3'}, {label: '超级管理员', value: '5'}]" :filter-multiple="false" />
+      <vxe-column field="userId" title="用户ID" type="html" sortable />
+      <vxe-column field="userName" title="用户名" type="html" sortable />
+      <vxe-column field="authority" title="用户权限" type="html" :formatter="formatterAuthority" :filters="[{label: '实习生', value: 1}, {label: '管理员', value: 3}, {label: '超级管理员', value: 5}]" :filter-multiple="false" />
       <vxe-column title="操作" width="100" show-overflow>
         <template #default="{ row }">
           <vxe-button type="text" icon="vxe-icon-edit" @click="editEvent(row)" />
@@ -93,6 +93,7 @@
 // 弹框编辑 https://vxetable.cn/v3/#/table/edit/popupForm
 import VXETable from 'vxe-table'
 import XEUtils from 'xe-utils'
+import axios from 'axios'
 
 export default {
   data() {
@@ -107,38 +108,13 @@ export default {
       display: [],
       filterName1: '',
       submitLoading: false,
-      initialTableData: [
-        { id: 10001, name: 'JZY', authority: '5' },
-        { id: 10002, name: 'ZPF', authority: '3' },
-        { id: 10003, name: 'CC', authority: '3' },
-        { id: 10004, name: 'LXH', authority: '3' },
-        { id: 10005, name: 'RHF', authority: '3' },
-        { id: 10006, name: 'ZCY', authority: '3' },
-        { id: 10001, name: 'JZY', authority: '5' },
-        { id: 10002, name: 'ZPF', authority: '3' },
-        { id: 10003, name: 'CC', authority: '3' },
-        { id: 10004, name: 'LXH', authority: '3' },
-        { id: 10005, name: 'RHF', authority: '3' },
-        { id: 10006, name: 'ZCY', authority: '3' },
-        { id: 10001, name: 'JZY', authority: '5' },
-        { id: 10002, name: 'ZPF', authority: '3' },
-        { id: 10003, name: 'CC', authority: '3' },
-        { id: 10004, name: 'LXH', authority: '3' },
-        { id: 10005, name: 'RHF', authority: '3' },
-        { id: 10006, name: 'ZCY', authority: '3' },
-        { id: 10001, name: 'JZY', authority: '5' },
-        { id: 10002, name: 'ZPF', authority: '3' },
-        { id: 10003, name: 'CC', authority: '3' },
-        { id: 10004, name: 'LXH', authority: '3' },
-        { id: 10005, name: 'RHF', authority: '3' },
-        { id: 10006, name: 'ZCY', authority: '3' }
-      ],
+      result: [],
       selectRow: null,
       showEdit: false,
       authorityList: [
-        { label: '实习生', value: '1', disabled: false },
-        { label: '管理员', value: '3', disabled: false },
-        { label: '超级管理员', value: '5', disabled: true }
+        { label: '实习生', value: 1, disabled: false },
+        { label: '管理员', value: 3, disabled: false },
+        { label: '超级管理员', value: 5, disabled: true }
       ],
       formData: {
         authority: '1'
@@ -151,9 +127,35 @@ export default {
     }
   },
   created() {
-    this.searchEvent()
+    // this.searchEvent()
+    this.getUserAll()
   },
   methods: {
+    getUserAll() {
+      axios({
+        method: 'get',
+        url: 'http://localhost:8084/user/getAll',
+        timeout: 30000
+        // data: FormDatas
+      }).then(res => {
+        this.result = res.data
+        console.log(111, this.result)
+        this.tablePage.totalResult = this.result.length
+        this.display = this.result.slice((this.tablePage.currentPage - 1) * this.tablePage.pageSize, this.tablePage.currentPage * this.tablePage.pageSize)
+      })
+    },
+    postDrugAdd() {
+      const data = this.formData
+      axios({
+        method: 'post',
+        url: 'http://localhost:8084/drug/add',
+        timeout: 30000,
+        data
+        // data: FormDatas
+      }).then(res => {
+        this.getDrugAll()
+      })
+    },
     formatterAuthority({ cellValue }) {
       const item = this.authorityList.find(item => item.value === cellValue)
       return item ? item.label : ''
