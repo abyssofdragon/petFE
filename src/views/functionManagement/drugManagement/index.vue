@@ -51,7 +51,7 @@
     <vxe-modal
       id="drug"
       v-model="showEdit"
-      :title="selectRow ? '编辑&保存' : '新增&保存'"
+      :title="selectRow ? 'Update' : 'New'"
       width="800"
       min-width="600"
       min-height="300"
