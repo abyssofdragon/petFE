@@ -11,7 +11,7 @@
           <span style="color: #99a9bf">
             请选择病种，系统将根据选择自动生成试卷
           </span>
-          <el-button type="primary" @click="enterExam">
+          <el-button type="primary" @click="valid">
             生成试卷
           </el-button>
         </span>
@@ -132,13 +132,22 @@ export default {
       form: {
         problemList: [{ questionId: 1, category: '肠炎', content: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 }],
         resource: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-        // problem: ['', '第一题', '甲', '乙', '丙', '丁'],
         marking: [0],
         remarking: [0]
       }
     }
   },
+  created() {
+    console.log(localStorage.getItem('role'))
+  },
   methods: {
+    valid() {
+      if (this.checkedTypes.length < 1 || this.checkedTypes.length > 5) {
+        alert('注意：选择的病种数量需要在1~5范围内！')
+      } else {
+        this.enterExam()
+      }
+    },
     enterExam() {
       const data = this.checkedTypes
       let oo
@@ -176,24 +185,19 @@ export default {
       this.form.remarking = [0]
       this.checkedTypes = []
       this.form.problemList = [{ questionId: 1, category: '肠炎', content: '这是第二个题目', optionA: '选项a', optionB: '选项b', optionC: '选项c', optionD: '选项d', answer: 'B', score: 4 }]
-      this.resource = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+      this.form.resource = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
       this.showResult = false
       this.showCard = true
       this.showExam = false
     },
     onSubmit() {
       let data = []
+      let result
+      let score = 0
       for (let i = 1; i <= 20; i++) {
         data.push({ questionId: this.form.problemList[i].questionId, userAnswer: this.form.resource[i].charAt(0) })
-        if (this.form.resource[i].charAt(0) === this.form.problemList[i].answer) {
-          this.form.marking.push(0)
-          this.form.remarking.push(1)
-        } else {
-          this.form.marking.push(1)
-          this.form.remarking.push(0)
-        }
       }
-      console.log(data)
+      // console.log(data)
 
       axios({
         method: 'post',
@@ -202,7 +206,19 @@ export default {
         data
       }).then(res => {
         console.log(res)
-        this.score = res.data.data
+        result = res.data.data
+        score = 0
+        for (let i = 1; i <= 20; i++) {
+          if (result[i - 1].correct) {
+            this.form.marking.push(0)
+            this.form.remarking.push(1)
+          } else {
+            this.form.marking.push(1)
+            this.form.remarking.push(0)
+          }
+          score += result[i - 1].score
+        }
+        this.score = score
       })
 
       this.showCard = false

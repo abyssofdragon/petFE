@@ -188,7 +188,8 @@ export const constantRoutes = [
     name: 'SuperAdmin',
     meta: {
       title: '超级管理员',
-      icon: 'nested'
+      icon: 'nested',
+      roles: ['user']
     },
     children: [
       userManagement

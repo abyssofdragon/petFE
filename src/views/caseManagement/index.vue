@@ -87,34 +87,34 @@
           <el-input v-model="addCase.owner" />
         </el-form-item>
         <el-form-item label="地址">
-          <el-input v-model="addCase.familyAddress" />
+          <el-input v-model="addCase.address" />
         </el-form-item>
         <el-form-item label="电话">
-          <el-input v-model="addCase.phoneNumber" />
+          <el-input v-model="addCase.phone" />
         </el-form-item>
         <el-form-item label="宠物名">
           <el-input v-model="addCase.petName" />
         </el-form-item>
         <el-form-item label="类别">
-          <el-input v-model="addCase.petCategory" />
+          <el-input v-model="addCase.type" />
         </el-form-item>
         <el-form-item label="品种">
-          <el-input v-model="addCase.breed" />
+          <el-input v-model="addCase.variety" />
         </el-form-item>
         <el-form-item label="病种">
           <el-input v-model="addCase.category" />
         </el-form-item>
         <el-form-item label="年龄">
-          <el-input v-model="addCase.petAge" />
+          <el-input v-model="addCase.age" />
         </el-form-item>
         <el-form-item label="性别">
-          <el-input v-model="addCase.gender" />
+          <el-input v-model="addCase.sex" />
         </el-form-item>
         <el-form-item label="免疫">
           <el-input v-model="addCase.immunity" />
         </el-form-item>
         <el-form-item label="体重">
-          <el-input v-model="addCase.petWeight" />
+          <el-input v-model="addCase.weight" />
         </el-form-item>
         <el-form-item label="病例名称">
           <el-input v-model="addCase.name" />
@@ -148,34 +148,34 @@
           <el-input v-model="modifyCase.owner" />
         </el-form-item>
         <el-form-item label="地址">
-          <el-input v-model="modifyCase.familyAddress" />
+          <el-input v-model="modifyCase.address" />
         </el-form-item>
         <el-form-item label="电话">
-          <el-input v-model="modifyCase.phoneNumber" />
+          <el-input v-model="modifyCase.phone" />
         </el-form-item>
         <el-form-item label="宠物名">
           <el-input v-model="modifyCase.petName" />
         </el-form-item>
         <el-form-item label="类别">
-          <el-input v-model="modifyCase.petCategory" />
+          <el-input v-model="modifyCase.type" />
         </el-form-item>
         <el-form-item label="品种">
-          <el-input v-model="modifyCase.breed" />
+          <el-input v-model="modifyCase.variety" />
         </el-form-item>
         <el-form-item label="病种">
           <el-input v-model="modifyCase.category" />
         </el-form-item>
         <el-form-item label="年龄">
-          <el-input v-model="modifyCase.petAge" />
+          <el-input v-model="modifyCase.age" />
         </el-form-item>
         <el-form-item label="性别">
-          <el-input v-model="modifyCase.gender" />
+          <el-input v-model="modifyCase.sex" />
         </el-form-item>
         <el-form-item label="免疫">
           <el-input v-model="modifyCase.immunity" />
         </el-form-item>
         <el-form-item label="体重">
-          <el-input v-model="modifyCase.petWeight" />
+          <el-input v-model="modifyCase.weight" />
         </el-form-item>
         <el-form-item label="病例名称">
           <el-input v-model="modifyCase.name" />
@@ -183,36 +183,6 @@
         <el-form-item label="接诊状态">
           <el-input v-model="modifyCase.state" type="textarea" autosize />
         </el-form-item>
-        <!--          :on-preview="handlePreview"-->
-        <!--          :on-remove="handleRemove"-->
-        <!--          :before-remove="beforeRemove"-->
-        <!--          :on-exceed="handleExceed"-->
-        <el-upload
-          class="upload-demo"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          style="margin-left: 120px; display: inline-block"
-          multiple
-          :limit="3"
-          :file-list="imageList"
-        >
-          <el-button size="small" type="primary">上传图片</el-button>
-          <div slot="tip" class="el-upload__tip">为接诊状态上传图片</div>
-        </el-upload>
-        <!--          :on-preview="handlePreview"-->
-        <!--          :on-remove="handleRemove"-->
-        <!--          :before-remove="beforeRemove"-->
-        <!--          :on-exceed="handleExceed"-->
-        <el-upload
-          class="upload-demo"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          style="margin-left: 120px; display: inline-block"
-          multiple
-          :limit="3"
-          :file-list="videoList"
-        >
-          <el-button size="small" type="primary">上传视频</el-button>
-          <div slot="tip" class="el-upload__tip">为接诊状态上传视频</div>
-        </el-upload>
         <el-form-item label="诊疗过程和方法">
           <el-input v-model="modifyCase.diagnoseProcess" type="textarea" autosize />
         </el-form-item>
@@ -250,18 +220,18 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      caseList: [{ patientId: 0, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
-        petWeight: '', category: '口炎', name: '这是第一个病例', state: '接诊状态a', diagnoseProcess: '诊疗过程和方法a', result: '诊断结果a', treatment: '治疗方案a' },
-      { patientId: 1, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
-        petWeight: '', category: '肠炎', name: '这是第二个病例', state: '接诊状态b', diagnoseProcess: '诊疗过程和方法b', result: '诊断结果b', treatment: '治疗方案b' }],
+      caseList: [{ patientId: 0, owner: '主人a', address: '翻斗大街', phone: '111', petName: 'aaa', type: 'a', variety: 'aa', age: '11', sex: '公', immunity: '百',
+        weight: '11g', category: '口炎', name: '这是第一个病例', state: '接诊状态a', diagnoseProcess: '诊疗过程和方法a', result: '诊断结果a', treatment: '治疗方案a' },
+      { patientId: 1, owner: '主人b', address: '翻斗大街', phone: '999', petName: 'bbbb', type: 'b', variety: 'bb', age: '12', sex: '母', immunity: '百',
+        weight: '11kg', category: '肠炎', name: '这是第二个病例', state: '接诊状态b', diagnoseProcess: '诊疗过程和方法b', result: '诊断结果b', treatment: '治疗方案b' }],
       categoryFilter: [{ text: '口炎', value: '口炎' }, { text: '肠炎', value: '肠炎' }],
       caseDialog: false,
       addDialog: false,
       modifyDialog: false,
-      addCase: { patientId: 0, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
-        petWeight: '', category: '', name: '', state: '', diagnoseProcess: '', result: '', treatment: '' },
-      modifyCase: { patientId: 0, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
-        petWeight: '', category: '', name: '', state: '', diagnoseProcess: '', result: '', treatment: '' },
+      addCase: { patientId: 0, owner: '', address: '', phone: '', petName: '', type: '', variety: '', age: '', sex: '', immunity: '',
+        weight: '', category: '', name: '', state: '', diagnoseProcess: '', result: '', treatment: '' },
+      modifyCase: { patientId: 0, owner: '', address: '', phone: '', petName: '', type: '', variety: '', age: '', sex: '', immunity: '',
+        weight: '', category: '', name: '', state: '', diagnoseProcess: '', result: '', treatment: '' },
       categorySearch: '',
       caseSearch: '',
       index: 0,
@@ -284,12 +254,13 @@ export default {
       })
     },
     searchByCase() {
+      console.log(this.caseSearch)
       axios({
         method: 'get',
         url: 'http://localhost:8084/patient/searchByName',
         timeout: 30000,
         params: {
-          name: this.categorySearch
+          name: this.caseSearch
         }
       }).then(res => {
         console.log(res)
@@ -300,15 +271,15 @@ export default {
     searchByCtg() {
       axios({
         method: 'get',
-        url: 'http://localhost:8084/question/searchByCategory',
+        url: 'http://localhost:8084/patient/searchByCategory',
         timeout: 30000,
         params: {
           category: this.categorySearch
         }
       }).then(res => {
         console.log(res)
-        this.problemList = res.data.data
-        this.total = this.problemList.length
+        this.caseList = res.data.data
+        // this.total = this.problemList.length
       })
     },
     deleteD(index) {
@@ -344,7 +315,8 @@ export default {
         console.log(res)
         this.getAllCase()
       })
-      this.modifyCase = { patientId: 0, type: '', name: '', state: '', diagnoseProcess: '', result: '', treatment: '' }
+      this.modifyCase = { patientId: 0, owner: '', address: '', phone: '', petName: '', type: '', variety: '', age: '', sex: '', immunity: '',
+        weight: '', category: '', name: '', state: '', diagnoseProcess: '', result: '', treatment: '' }
       this.modifyDialog = false
     },
     addNewCase() {
@@ -360,8 +332,8 @@ export default {
       })
       // this.addCase.patientId = this.caseList[this.caseList.length - 1].patientId + 1
       // this.caseList.push(this.addCase)
-      this.addCase = { patientId: 0, owner: '', familyAddress: '', phoneNumber: '', petName: '', petCategory: '', breed: '', petAge: '', gender: '', immunity: '',
-        petWeight: '', category: '', name: '', state: '', diagnoseProcess: '', result: '', treatment: '' }
+      this.addCase = { patientId: 0, owner: '', address: '', phone: '', petName: '', type: '', variety: '', age: '', sex: '', immunity: '',
+        weight: '', category: '', name: '', state: '', diagnoseProcess: '', result: '', treatment: '' }
       this.addDialog = false
     },
     filterType(value, row) {

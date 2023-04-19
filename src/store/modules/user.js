@@ -57,6 +57,7 @@ const actions = {
         const { data } = res
         console.log(data.data)
         localStorage.setItem('token', data.data.Authorization)
+        localStorage.setItem('role', 'admin')
         commit('SET_TOKEN', data.data.Authorization)
         setToken(data.data.Authorization)
         resolve()

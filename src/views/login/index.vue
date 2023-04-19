@@ -41,8 +41,8 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:30%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
-      <el-button :loading="loading" type="primary" style="width:30%;margin-bottom:30px;float: right" @click="registerDialog = true">Register</el-button>
+      <el-button type="primary" style="width:30%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-button type="primary" style="width:30%;margin-bottom:30px;float: right" @click="registerDialog = true">Register</el-button>
 
       <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
@@ -55,12 +55,12 @@
       :visible.sync="registerDialog"
       width="30%"
     >
-      <el-form ref="form" :model="userInfo" label-width="80px">
-        <el-form-item label="用户名">
-          <el-input v-model="userInfo.userName" />
+      <el-form ref="form" :model="userInfo" label-width="80px" class="registerD">
+        <el-form-item style="color: black" label="用户名">
+          <el-input style="color: black" v-model="userInfo.userName" />
         </el-form-item>
         <el-form-item label="密码">
-          <el-input v-model="userInfo.password" />
+          <el-input v-model="userInfo.password" show-password />
         </el-form-item>
         <el-form-item label="性别">
           <el-input v-model="userInfo.gender" />
@@ -68,18 +68,18 @@
         <el-form-item label="年龄">
           <el-input v-model="userInfo.age" />
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="handleRegister">注册</el-button>
-          <el-button @click="registerDialog = false">取消</el-button>
-        </el-form-item>
       </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handleRegister">注册</el-button>
+        <el-button type="primary" @click="registerDialog = false">取消</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import { validUsername } from '@/utils/validate'
-import api from "@/store/modules/api";
+import api from '@/store/modules/api'
 
 export default {
   name: 'Login',
@@ -138,8 +138,11 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
+
           this.$store.dispatch('user/login', this.loginForm).then(() => {
+            console.log('-----')
             this.$router.push({ path: this.redirect || '/' })
+            console.log(11111111111)
             this.loading = false
           }).catch(() => {
             this.loading = false
@@ -280,5 +283,6 @@ $light_gray:#eee;
     cursor: pointer;
     user-select: none;
   }
+
 }
 </style>
