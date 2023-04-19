@@ -24,6 +24,7 @@
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",
     "photo-sphere-viewer": "^4.3.0",
+    "selenium-webdriver": "^4.8.2",
     "three": "^0.150.1",
     "three-fbx-loader": "^1.0.3",
     "three-obj-mtl-loader": "^1.0.3",

@@ -22,8 +22,8 @@
       <vxe-column type="seq" width="60" />
       <vxe-column field="id" title="ID" type="html" sortable />
       <vxe-column field="name" title="名称" type="html" sortable />
-      <vxe-column field="price" title="价格" type="html" sortable />
-      <vxe-column field="detail" title="详情" type="html" />
+      <vxe-column field="age" title="年龄" type="html" sortable />
+      <vxe-column field="gender" title="性别" type="html" :formatter="formatterGender" :filters="[{label: '男', value: '1'}, {label: '女', value: '2'}]" :filter-multiple="false" />
       <vxe-column title="操作" width="100" show-overflow>
         <template #default="{ row }">
           <vxe-button type="text" icon="vxe-icon-edit" @click="editEvent(row)" />
@@ -65,25 +65,27 @@
       <template #default>
         <vxe-form :data="formData" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent">
           <vxe-form-item
-            title="疫苗信息"
+            title="人员信息"
             title-align="left"
             :title-width="200"
             :span="24"
             :title-prefix="{ icon: 'vxe-icon-comment' }"
           />
-          <vxe-form-item field="name" title="名称" :span="12" :item-render="{}">
+          <vxe-form-item field="age" title="年龄" :span="12" :item-render="{}">
             <template #default="{ data }">
-              <vxe-input v-model="data.name" placeholder="请输入名称" />
+              <vxe-input v-model="data.age" type="number" placeholder="请输入年龄" />
             </template>
           </vxe-form-item>
-          <vxe-form-item field="price" title="价格" :span="12" :item-render="{}">
+          <vxe-form-item field="gender" title="性别" :span="12" :item-render="{}">
             <template #default="{ data }">
-              <vxe-input v-model="data.price" type="number" placeholder="请输入价格" />
-            </template>
-          </vxe-form-item>
-          <vxe-form-item field="detail" title="详情" :span="24" :item-render="{}" :title-suffix="{message: '详情', icon: 'vxe-icon-question-circle-fill'}">
-            <template #default="{ data }">
-              <vxe-textarea v-model="data.detail" :autosize="{minRows: 2, maxRows: 4}" />
+              <vxe-select v-model="data.gender" transfer>
+                <vxe-option
+                  v-for="item in genderList"
+                  :key="item.value"
+                  :value="item.value"
+                  :label="item.label"
+                />
+              </vxe-select>
             </template>
           </vxe-form-item>
           <vxe-form-item align="center" title-align="left" :span="24">
@@ -119,38 +121,38 @@ export default {
       display: [],
       filterName1: '',
       submitLoading: false,
+      genderList: [
+        { label: '男', value: '1', disabled: false },
+        { label: '女', value: '2', disabled: false }
+      ],
       initialTableData: [
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' }
+        { id: 10001, name: 'JZY', age: '5', gender: '1' },
+        { id: 10001, name: 'JZY', age: '5', gender: '1' },
+        { id: 10001, name: 'JZY', age: '5', gender: '1' },
+        { id: 10001, name: 'JZY', age: '5', gender: '1' },
+        { id: 10001, name: 'JZY', age: '5', gender: '1' },
+        { id: 10001, name: 'JZY', age: '5', gender: '1' },
+        { id: 10001, name: 'JZY', age: '5', gender: '1' },
+        { id: 10001, name: 'JZY', age: '5', gender: '1' },
+        { id: 10001, name: 'JZY', age: '5', gender: '1' },
+        { id: 10001, name: 'JZY', age: '5', gender: '1' },
+        { id: 10001, name: 'JZY', age: '5', gender: '1' },
+        { id: 10001, name: 'JZY', age: '5', gender: '1' },
+        { id: 10001, name: 'JZY', age: '5', gender: '1' },
+        { id: 10001, name: 'JZY', age: '5', gender: '1' }
       ],
       selectRow: null,
       showEdit: false,
       formData: {
-        name: '示例',
-        priceL: '0',
-        detail: '示例'
+        age: '0',
+        gender: '示例'
       },
       formRules: {
-        name: [
-          { required: true, message: '请输入名称' }
+        age: [
+          { required: true, message: '请输入年龄' }
         ],
-        price: [
-          { required: true, message: '请输入价格' }
-        ],
-        detail: [
-          { required: true, message: '请输入详情' }
+        gender: [
+          { required: true, message: '请输入性别' }
         ]
       }
     }
@@ -159,6 +161,10 @@ export default {
     this.searchEvent()
   },
   methods: {
+    formatterGender({ cellValue }) {
+      const item = this.genderList.find(item => item.value === cellValue)
+      return item ? item.label : ''
+    },
     visibleMethod({ data }) {
       return data.flag1 === 'Y'
     },
@@ -167,18 +173,16 @@ export default {
     },
     editEvent(row) {
       this.formData = {
-        name: row.name,
-        price: row.price,
-        detail: row.detail
+        age: row.age,
+        gender: row.gender
       }
       this.selectRow = row
       this.showEdit = true
     },
     insertEvent() {
       this.formData = {
-        name: '',
-        price: '',
-        detail: ''
+        age: '',
+        gender: ''
       }
       this.selectRow = null
       this.showEdit = true
@@ -210,7 +214,7 @@ export default {
       const filterName = XEUtils.toValueString(this.filterName1).trim().toLowerCase()
       if (filterName) {
         const filterRE = new RegExp(filterName, 'gi')
-        const searchProps = ['name', 'detail']
+        const searchProps = ['name']
         const rest = this.initialTableData.filter(item => searchProps.some(key => XEUtils.toValueString(item[key]).toLowerCase().indexOf(filterName) > -1))
         this.list = rest.map(row => {
           const item = Object.assign({}, row)

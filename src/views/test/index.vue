@@ -104,7 +104,7 @@
             </div>
           </el-radio-group>
           <div>
-            你选择的答案是{{form.resource[o]}}，正确答案是{{form.problemList[o].answer}}
+            你选择的答案是{{ form.resource[o] }}，正确答案是{{ form.problemList[o].answer }}
           </div>
         </div>
         <el-form-item>
