@@ -4,7 +4,7 @@
       病例管理
     </div>
 
-    <div style="margin: 20px">
+    <div v-show="showTable" style="margin: 20px">
       <div>
         <el-button type="success" @click="addDialog = true">增加病例</el-button>
         <span style="float: right">
@@ -70,6 +70,7 @@
           width="180"
         >
           <template slot-scope="scope">
+            <el-button type="info" icon="el-icon-view" circle @click="lookCase(scope.row.patientId)" />
             <el-button type="primary" icon="el-icon-edit" circle @click="modifyD(scope.row.patientId)" />
             <el-button type="danger" icon="el-icon-delete" circle @click="deleteD(scope.row.patientId)" />
           </template>
@@ -82,53 +83,53 @@
       :visible.sync="addDialog"
       width="60%"
     >
-      <el-form ref="form" :model="addCase" label-width="120px">
-        <el-form-item label="主人">
+      <el-form ref="addform" :model="addCase" :rules="rules" label-width="120px">
+        <el-form-item label="主人" prop="owner">
           <el-input v-model="addCase.owner" />
         </el-form-item>
-        <el-form-item label="地址">
+        <el-form-item label="地址" prop="address">
           <el-input v-model="addCase.address" />
         </el-form-item>
-        <el-form-item label="电话">
+        <el-form-item label="电话" prop="phone">
           <el-input v-model="addCase.phone" />
         </el-form-item>
-        <el-form-item label="宠物名">
+        <el-form-item label="宠物名" prop="petName">
           <el-input v-model="addCase.petName" />
         </el-form-item>
-        <el-form-item label="类别">
+        <el-form-item label="类别" prop="type">
           <el-input v-model="addCase.type" />
         </el-form-item>
-        <el-form-item label="品种">
+        <el-form-item label="品种" prop="variety">
           <el-input v-model="addCase.variety" />
         </el-form-item>
-        <el-form-item label="病种">
+        <el-form-item label="病种" prop="category">
           <el-input v-model="addCase.category" />
         </el-form-item>
-        <el-form-item label="年龄">
+        <el-form-item label="年龄" prop="age">
           <el-input v-model="addCase.age" />
         </el-form-item>
-        <el-form-item label="性别">
+        <el-form-item label="性别" prop="sex">
           <el-input v-model="addCase.sex" />
         </el-form-item>
-        <el-form-item label="免疫">
+        <el-form-item label="免疫" prop="immunity">
           <el-input v-model="addCase.immunity" />
         </el-form-item>
-        <el-form-item label="体重">
+        <el-form-item label="体重" prop="weight">
           <el-input v-model="addCase.weight" />
         </el-form-item>
-        <el-form-item label="病例名称">
+        <el-form-item label="病例名称" prop="name">
           <el-input v-model="addCase.name" />
         </el-form-item>
-        <el-form-item label="接诊状态">
+        <el-form-item label="接诊状态" prop="state">
           <el-input v-model="addCase.state" type="textarea" autosize />
         </el-form-item>
-        <el-form-item label="诊疗过程和方法">
+        <el-form-item label="诊疗过程和方法" prop="diagnoseProcess">
           <el-input v-model="addCase.diagnoseProcess" type="textarea" autosize />
         </el-form-item>
-        <el-form-item label="诊断结果">
+        <el-form-item label="诊断结果" prop="result">
           <el-input v-model="addCase.result" type="textarea" autosize />
         </el-form-item>
-        <el-form-item label="治疗方案">
+        <el-form-item label="治疗方案" prop="treatment">
           <el-input v-model="addCase.treatment" type="textarea" autosize />
         </el-form-item>
         <el-form-item>
@@ -143,53 +144,53 @@
       :visible.sync="modifyDialog"
       width="60%"
     >
-      <el-form ref="form" :model="modifyCase" label-width="120px">
-        <el-form-item label="主人">
+      <el-form ref="modifyform" :model="modifyCase" :rules="rules" label-width="120px">
+        <el-form-item label="主人" prop="owner">
           <el-input v-model="modifyCase.owner" />
         </el-form-item>
-        <el-form-item label="地址">
+        <el-form-item label="地址" prop="address">
           <el-input v-model="modifyCase.address" />
         </el-form-item>
-        <el-form-item label="电话">
+        <el-form-item label="电话" prop="phone">
           <el-input v-model="modifyCase.phone" />
         </el-form-item>
-        <el-form-item label="宠物名">
+        <el-form-item label="宠物名" prop="petName">
           <el-input v-model="modifyCase.petName" />
         </el-form-item>
-        <el-form-item label="类别">
+        <el-form-item label="类别" prop="type">
           <el-input v-model="modifyCase.type" />
         </el-form-item>
-        <el-form-item label="品种">
+        <el-form-item label="品种" prop="variety">
           <el-input v-model="modifyCase.variety" />
         </el-form-item>
-        <el-form-item label="病种">
+        <el-form-item label="病种" prop="category">
           <el-input v-model="modifyCase.category" />
         </el-form-item>
-        <el-form-item label="年龄">
+        <el-form-item label="年龄" prop="age">
           <el-input v-model="modifyCase.age" />
         </el-form-item>
-        <el-form-item label="性别">
+        <el-form-item label="性别" prop="sex">
           <el-input v-model="modifyCase.sex" />
         </el-form-item>
-        <el-form-item label="免疫">
+        <el-form-item label="免疫" prop="immunity">
           <el-input v-model="modifyCase.immunity" />
         </el-form-item>
-        <el-form-item label="体重">
+        <el-form-item label="体重" prop="weight">
           <el-input v-model="modifyCase.weight" />
         </el-form-item>
-        <el-form-item label="病例名称">
+        <el-form-item label="病例名称" prop="name">
           <el-input v-model="modifyCase.name" />
         </el-form-item>
-        <el-form-item label="接诊状态">
+        <el-form-item label="接诊状态" prop="state">
           <el-input v-model="modifyCase.state" type="textarea" autosize />
         </el-form-item>
-        <el-form-item label="诊疗过程和方法">
+        <el-form-item label="诊疗过程和方法" prop="diagnoseProcess">
           <el-input v-model="modifyCase.diagnoseProcess" type="textarea" autosize />
         </el-form-item>
-        <el-form-item label="诊断结果">
+        <el-form-item label="诊断结果" prop="result">
           <el-input v-model="modifyCase.result" type="textarea" autosize />
         </el-form-item>
-        <el-form-item label="治疗方案">
+        <el-form-item label="治疗方案" prop="treatment">
           <el-input v-model="modifyCase.treatment" type="textarea" autosize />
         </el-form-item>
         <el-form-item>
@@ -211,13 +212,172 @@
       </span>
     </el-dialog>
 
+    <div v-if="showCase" style="margin: 40px">
+      <el-descriptions :column="4" border>
+        <template slot="title">
+          {{ this.mycase.name }}
+        </template>
+        <el-descriptions-item label="主人">{{ this.mycase.owner }}</el-descriptions-item>
+        <el-descriptions-item label="地址" :span="2">{{ this.mycase.address }}</el-descriptions-item>
+        <el-descriptions-item label="电话">{{ this.mycase.phone }}</el-descriptions-item>
+        <el-descriptions-item label="宠物名">{{ this.mycase.petName }}</el-descriptions-item>
+        <el-descriptions-item label="种类">{{ this.mycase.type }}</el-descriptions-item>
+        <el-descriptions-item label="品种">{{ this.mycase.variety }}</el-descriptions-item>
+        <el-descriptions-item label="病种">{{ this.mycase.category }}</el-descriptions-item>
+        <el-descriptions-item label="年龄">{{ this.mycase.age }}</el-descriptions-item>
+        <el-descriptions-item label="性别">{{ this.mycase.sex }}</el-descriptions-item>
+        <el-descriptions-item label="免疫">{{ this.mycase.immunity }}</el-descriptions-item>
+        <el-descriptions-item label="体重">{{ this.mycase.weight }}</el-descriptions-item>
+        <el-descriptions-item label="接诊状态" :span="16">
+          <div>{{ this.mycase.state }}</div>
+          <div>
+            <el-image
+              style="width: 100px; height: 100px"
+              :src="imageurl"
+              :fit="fit"
+            />
+          </div>
+          <el-upload
+            class="upload-demo"
+            action
+            :http-request="uploadImgS"
+            style="margin-left: 120px; display: inline-block"
+            multiple
+            accept="img/jpg"
+            :before-upload="beforeUploadImg"
+            :on-exceed="handleExceed"
+            :limit="5"
+            :file-list="stateImgList"
+          >
+            <el-button size="small" type="primary">上传图片</el-button>
+            <div slot="tip" class="el-upload__tip">为接诊状态上传图片</div>
+          </el-upload>
+          <el-upload
+            class="upload-demo"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            style="margin-left: 120px; display: inline-block"
+            multiple
+            :on-exceed="handleExceed"
+            :limit="3"
+            :file-list="stateVdoList"
+          >
+            <el-button size="small" type="primary">上传视频</el-button>
+            <div slot="tip" class="el-upload__tip">为接诊状态上传视频</div>
+          </el-upload>
+        </el-descriptions-item>
+        <el-descriptions-item label="诊疗过程和方法" :span="16">
+          <div>{{ this.mycase.diagnoseProcess }}</div>
+          <div>
+            <el-image
+              style="width: 100px; height: 100px"
+              :src="imageurl"
+              :fit="fit"
+            />
+          </div>
+          <el-upload
+            class="upload-demo"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            style="margin-left: 120px; display: inline-block"
+            multiple
+            :on-exceed="handleExceed"
+            :limit="3"
+            :file-list="diaImgList"
+          >
+            <el-button size="small" type="primary">上传图片</el-button>
+            <div slot="tip" class="el-upload__tip">为诊疗过程和方法上传图片</div>
+          </el-upload>
+          <el-upload
+            class="upload-demo"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            style="margin-left: 120px; display: inline-block"
+            multiple
+            :on-exceed="handleExceed"
+            :limit="3"
+            :file-list="diaVdoList"
+          >
+            <el-button size="small" type="primary">上传视频</el-button>
+            <div slot="tip" class="el-upload__tip">为诊疗过程和方法上传视频</div>
+          </el-upload>
+        </el-descriptions-item>
+        <el-descriptions-item label="诊断结果" :span="16">
+          <div>{{ this.mycase.result }}</div>
+          <div>
+            <el-image
+              style="width: 100px; height: 100px"
+              :src="imageurl"
+              :fit="fit"
+            />
+          </div>
+          <el-upload
+            class="upload-demo"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            style="margin-left: 120px; display: inline-block"
+            multiple
+            :on-exceed="handleExceed"
+            :limit="3"
+            :file-list="rstImgList"
+          >
+            <el-button size="small" type="primary">上传图片</el-button>
+            <div slot="tip" class="el-upload__tip">为诊断结果上传图片</div>
+          </el-upload>
+          <el-upload
+            class="upload-demo"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            style="margin-left: 120px; display: inline-block"
+            multiple
+            :on-exceed="handleExceed"
+            :limit="3"
+            :file-list="rstVdoList"
+          >
+            <el-button size="small" type="primary">上传视频</el-button>
+            <div slot="tip" class="el-upload__tip">为诊断结果上传视频</div>
+          </el-upload>
+        </el-descriptions-item>
+        <el-descriptions-item label="治疗方案" :span="16">
+          <div>{{ this.mycase.treatment }}</div>
+          <div class="videoPlayer">
+            <xg-player :url="videourl" @triggerEvent="triggerEvent" />
+          </div>
+          <el-upload
+            class="upload-demo"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            style="margin-left: 120px; display: inline-block"
+            multiple
+            :on-exceed="handleExceed"
+            :limit="3"
+            :file-list="tmtImgList"
+          >
+            <el-button size="small" type="primary">上传图片</el-button>
+            <div slot="tip" class="el-upload__tip">为治疗方案上传图片</div>
+          </el-upload>
+          <el-upload
+            class="upload-demo"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            style="margin-left: 120px; display: inline-block"
+            multiple
+            :on-exceed="handleExceed"
+            :limit="3"
+            :file-list="tmtVdoList"
+          >
+            <el-button size="small" type="primary">上传视频</el-button>
+            <div slot="tip" class="el-upload__tip">为治疗方案上传视频</div>
+          </el-upload>
+        </el-descriptions-item>
+      </el-descriptions>
+      <el-button type="success" @click="selectCase">返回</el-button>
+    </div>
+
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import XgPlayer from '@/components/XgPlayer'
 
 export default {
+  components: {
+    XgPlayer
+  },
   data() {
     return {
       caseList: [{ patientId: 0, owner: '主人a', address: '翻斗大街', phone: '111', petName: 'aaa', type: 'a', variety: 'aa', age: '11', sex: '公', immunity: '百',
@@ -235,8 +395,74 @@ export default {
       categorySearch: '',
       caseSearch: '',
       index: 0,
+      fit: 'scale-down',
       imageList: [],
-      videoList: []
+      videoList: [],
+      stateImgList: [],
+      stateVdoList: [],
+      diaImgList: [],
+      diaVdoList: [],
+      rstImgList: [],
+      rstVdoList: [],
+      tmtImgList: [],
+      tmtVdoList: [],
+      imageurl: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+      videourl: require('../../../public/static/videos/video.mp4'),
+      mycase: { patientId: 0, owner: '主人a', address: '翻斗大街', phone: '111', petName: 'aaa', type: 'a', variety: 'aa', age: '11', sex: '公', immunity: '百',
+        weight: '11g', category: '口炎', name: '这是第一个病例', state: '接诊状态a', diagnoseProcess: '诊疗过程和方法a', result: '诊断结果a', treatment: '治疗方案a' },
+      showCase: false,
+      showTable: true,
+      rules: {
+        owner: [
+          { required: true, message: '请输入宠物主人', trigger: 'blur' }
+        ],
+        address: [
+          { required: true, message: '请输入地址', trigger: 'blur' }
+        ],
+        phone: [
+          { required: true, message: '请输入电话号码', trigger: 'blur' }
+        ],
+        petName: [
+          { required: true, message: '请输入宠物名称', trigger: 'blur' }
+        ],
+        type: [
+          { required: true, message: '请输入宠物种类', trigger: 'blur' }
+        ],
+        variety: [
+          { required: true, message: '请输入宠物品种', trigger: 'blur' }
+        ],
+        age: [
+          { required: true, message: '请输入宠物年龄', trigger: 'blur' }
+        ],
+        sex: [
+          { required: true, message: '请输入宠物性别', trigger: 'blur' },
+          { min: 1, max: 1, message: '请输入一个字符', trigger: 'blur' }
+        ],
+        immunity: [
+          { required: true, message: '请输入宠物免疫', trigger: 'blur' }
+        ],
+        weight: [
+          { required: true, message: '请输入宠物重量', trigger: 'blur' }
+        ],
+        category: [
+          { required: true, message: '请输入病种', trigger: 'blur' }
+        ],
+        name: [
+          { required: true, message: '请输入病例名称', trigger: 'blur' }
+        ],
+        state: [
+          { required: true, message: '请输入接诊状态', trigger: 'blur' }
+        ],
+        diagnoseProcess: [
+          { required: true, message: '请输入治疗过程', trigger: 'blur' }
+        ],
+        result: [
+          { required: true, message: '请输入治疗结果', trigger: 'blur' }
+        ],
+        treatment: [
+          { required: true, message: '请输入治疗方案', trigger: 'blur' }
+        ]
+      }
     }
   },
   created() {
@@ -306,38 +532,92 @@ export default {
     modifyOldCase() {
       // this.caseList[this.index] = this.modifyCase
       const data = this.modifyCase
-      axios({
-        method: 'put',
-        url: 'http://localhost:8084/patient/update',
-        timeout: 30000,
-        data
-      }).then(res => {
-        console.log(res)
-        this.getAllCase()
+      this.$refs['modifyform'].validate((valid) => {
+        if (valid) {
+          axios({
+            method: 'put',
+            url: 'http://localhost:8084/patient/update',
+            timeout: 30000,
+            data
+          }).then(res => {
+            console.log(res)
+            this.getAllCase()
+          })
+          this.modifyCase = { patientId: 0, owner: '', address: '', phone: '', petName: '', type: '', variety: '', age: '', sex: '', immunity: '',
+            weight: '', category: '', name: '', state: '', diagnoseProcess: '', result: '', treatment: '' }
+          this.modifyDialog = false
+        } else {
+          console.log('error submit!!')
+        }
       })
-      this.modifyCase = { patientId: 0, owner: '', address: '', phone: '', petName: '', type: '', variety: '', age: '', sex: '', immunity: '',
-        weight: '', category: '', name: '', state: '', diagnoseProcess: '', result: '', treatment: '' }
-      this.modifyDialog = false
     },
     addNewCase() {
       const data = this.addCase
-      axios({
-        method: 'post',
-        url: 'http://localhost:8084/patient/add',
-        timeout: 30000,
-        data
-      }).then(res => {
-        console.log(res)
-        this.getAllCase()
+      this.$refs['addform'].validate((valid) => {
+        if (valid) {
+          axios({
+            method: 'post',
+            url: 'http://localhost:8084/patient/add',
+            timeout: 30000,
+            data
+          }).then(res => {
+            console.log(res)
+            this.getAllCase()
+          })
+          this.addCase = { patientId: 0, owner: '', address: '', phone: '', petName: '', type: '', variety: '', age: '', sex: '', immunity: '',
+            weight: '', category: '', name: '', state: '', diagnoseProcess: '', result: '', treatment: '' }
+          this.addDialog = false
+        } else {
+          console.log('error submit!!')
+        }
       })
       // this.addCase.patientId = this.caseList[this.caseList.length - 1].patientId + 1
       // this.caseList.push(this.addCase)
-      this.addCase = { patientId: 0, owner: '', address: '', phone: '', petName: '', type: '', variety: '', age: '', sex: '', immunity: '',
-        weight: '', category: '', name: '', state: '', diagnoseProcess: '', result: '', treatment: '' }
-      this.addDialog = false
+    },
+    lookCase(index) {
+      this.showTable = false
+      this.showCase = true
+      this.mycase = this.caseList.find(x => x.patientId === index)
+    },
+    uploadImgS(item) {
+      const FormDatas = new FormData()
+      FormDatas.append('image', item.file)
+      console.log(item.file)
+      // axios({
+      //   method: 'post',
+      //   url: '/api/nn/paperScore',
+      //   timeout: 30000,
+      //   data: FormDatas
+      // }).then(res => {
+      //   console.log(res.data)
+      // })
     },
     filterType(value, row) {
       return row.type === value
+    },
+    triggerEvent(value) {
+      console.log('是否播放：', value)
+    },
+    beforeUploadImg(file) {
+      const FILE_NAME = file.name
+      if (FILE_NAME.substring(FILE_NAME.lastIndexOf('.')) !== '.jpg' && FILE_NAME.substring(FILE_NAME.lastIndexOf('.')) !== '.png') {
+        this.$message.warning('仅支持.jpg和.png文件')
+        return false
+      }
+      const isLt100M = file.size / 1024 / 1024 < 100
+      if (isLt100M) {
+        return true
+      }
+      this.$message.warning('请上传不超过100M的文件.')
+      return false
+    },
+    handleExceed(fileList) {
+      this.$message.warning('上传文件数量不超过5.')
+    },
+    selectCase() {
+      this.showCase = false
+      this.showTable = true
+      this.getAllCase()
     }
   }
 }

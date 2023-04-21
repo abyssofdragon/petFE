@@ -38,7 +38,7 @@
           @click="select"
         >返回</el-button>
       </div>
-      <el-form ref="form" :model="form" label-width="80px">
+      <el-form ref="form" :rules="rules" :model="form" label-width="80px">
         <div v-for="o in 20" :key="o" style="margin: 50px">
           <div>
             <span>
@@ -195,6 +195,10 @@ export default {
       let result
       let score = 0
       for (let i = 1; i <= 20; i++) {
+        if (this.form.resource[i] === '') {
+          alert('题目' + i + '未作答，请检查完后再提交试卷')
+          return
+        }
         data.push({ questionId: this.form.problemList[i].questionId, userAnswer: this.form.resource[i].charAt(0) })
       }
       // console.log(data)
