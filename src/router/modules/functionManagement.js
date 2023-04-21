@@ -4,36 +4,36 @@ export default {
   name: 'functionManagement',
   meta: { title: '功能管理' },
   children: [
-    {
-      path: 'departmentManagement',
-      component: () => import('@/views/functionManagement/departmentManagement'),
-      name: 'DepartmentManagement',
-      meta: { title: '科室管理' }
-    },
-    {
-      path: 'personnelManagement',
-      component: () => import('@/views/functionManagement/personnelManagement'),
-      name: 'PersonnelManagement',
-      meta: { title: '人员管理' }
-    },
+    // {
+    //   path: 'departmentManagement',
+    //   component: () => import('@/views/functionManagement/departmentManagement'),
+    //   name: 'DepartmentManagement',
+    //   meta: { title: '科室管理' }
+    // },
+    // {
+    //   path: 'personnelManagement',
+    //   component: () => import('@/views/functionManagement/personnelManagement'),
+    //   name: 'PersonnelManagement',
+    //   meta: { title: '人员管理' }
+    // },
     {
       path: 'drugManagement',
       component: () => import('@/views/functionManagement/drugManagement'),
       name: 'DrugManagement',
       meta: { title: '药品管理' }
     },
-    {
-      path: 'archivesManagement',
-      component: () => import('@/views/functionManagement/archivesManagement'),
-      name: 'ArchivesManagement',
-      meta: { title: '档案管理' }
-    },
-    {
-      path: 'chargeManagement',
-      component: () => import('@/views/functionManagement/chargeManagement'),
-      name: 'ChargeManagement',
-      meta: { title: '收费管理' }
-    },
+    // {
+    //   path: 'archivesManagement',
+    //   component: () => import('@/views/functionManagement/archivesManagement'),
+    //   name: 'ArchivesManagement',
+    //   meta: { title: '档案管理' }
+    // },
+    // {
+    //   path: 'chargeManagement',
+    //   component: () => import('@/views/functionManagement/chargeManagement'),
+    //   name: 'ChargeManagement',
+    //   meta: { title: '收费管理' }
+    // },
     {
       path: 'laboratoryProjectManagement',
       component: () => import('@/views/functionManagement/laboratoryProjectManagement'),

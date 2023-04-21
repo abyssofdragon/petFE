@@ -1,10 +1,10 @@
-<!-- 疫苗管理 -->
+<!-- 化验项目管理 -->
 <template>
   <div>
     <vxe-toolbar>
       <template #buttons>
         <vxe-button icon="vxe-icon-square-plus" @click="insertEvent()">新增</vxe-button>
-        <vxe-input v-model="filterName1" type="search" placeholder="试试全表搜索" @keyup="searchEvent" />
+        <vxe-input v-model="filterName" type="search" placeholder="搜索" @keyup="getSearchByName" />
       </template>
     </vxe-toolbar>
     <vxe-table
@@ -20,10 +20,11 @@
       @cell-dblclick="cellDBLClickEvent"
     >
       <vxe-column type="seq" width="60" />
-      <vxe-column field="id" title="ID" type="html" sortable />
-      <vxe-column field="name" title="名称" type="html" sortable />
-      <vxe-column field="price" title="价格" type="html" sortable />
-      <vxe-column field="detail" title="详情" type="html" />
+      <vxe-column field="vaccineId" title="ID" type="html" sortable />
+      <vxe-column field="vaccineName" title="名称" type="html" sortable />
+      <vxe-column field="vaccineQuantity" title="数量" type="html" sortable />
+      <vxe-column field="vaccinePrice" title="价格" type="html" />
+      <vxe-column field="vaccineDescription" title="描述" type="html" />
       <vxe-column title="操作" width="100" show-overflow>
         <template #default="{ row }">
           <vxe-button type="text" icon="vxe-icon-edit" @click="editEvent(row)" />
@@ -48,9 +49,9 @@
       @page-change="handlePageChange"
     />
     <vxe-modal
-      id="vaccine"
+      id="laboratory"
       v-model="showEdit"
-      :title="selectRow ? '编辑&保存' : '新增&保存'"
+      :title="selectRow ? 'Update' : 'New'"
       width="800"
       min-width="600"
       min-height="300"
@@ -65,30 +66,42 @@
       <template #default>
         <vxe-form :data="formData" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent">
           <vxe-form-item
-            title="疫苗信息"
+            title="化验项目信息"
             title-align="left"
             :title-width="200"
             :span="24"
             :title-prefix="{ icon: 'vxe-icon-comment' }"
           />
-          <vxe-form-item field="name" title="名称" :span="12" :item-render="{}">
+          <vxe-form-item field="vaccineName" title="名称" :span="8" :item-render="{}">
             <template #default="{ data }">
-              <vxe-input v-model="data.name" placeholder="请输入名称" />
+              <vxe-input v-model="data.vaccineName" placeholder="请输入名称" />
             </template>
           </vxe-form-item>
-          <vxe-form-item field="price" title="价格" :span="12" :item-render="{}">
+          <vxe-form-item field="vaccineQuantity" title="数量" :span="8" :item-render="{}">
             <template #default="{ data }">
-              <vxe-input v-model="data.price" type="number" placeholder="请输入价格" />
+              <vxe-input v-model="data.vaccineQuantity" type="number" placeholder="请输入价格" />
             </template>
           </vxe-form-item>
-          <vxe-form-item field="detail" title="详情" :span="24" :item-render="{}" :title-suffix="{message: '详情', icon: 'vxe-icon-question-circle-fill'}">
+          <vxe-form-item field="vaccinePrice" title="价格" :span="8" :item-render="{}">
             <template #default="{ data }">
-              <vxe-textarea v-model="data.detail" :autosize="{minRows: 2, maxRows: 4}" />
+              <vxe-input v-model="data.vaccinePrice" type="number" placeholder="请输入价格" />
+            </template>
+          </vxe-form-item>
+          <vxe-form-item
+            field="vaccineDescription"
+            title="详情"
+            :span="24"
+            :item-render="{}"
+            :title-suffix="{ message: '详情', icon: 'vxe-icon-question-circle-fill' }"
+          >
+            <template #default="{ data }">
+              <vxe-textarea v-model="data.vaccineDescription" :autosize="{ minRows: 2, maxRows: 4 }" />
             </template>
           </vxe-form-item>
           <vxe-form-item align="center" title-align="left" :span="24">
             <template #default>
-              <vxe-button type="submit">提交</vxe-button>
+              <vxe-button v-if="selectRow" type="submit" @click="putUpdate">修改</vxe-button>
+              <vxe-button v-else type="submit" @click="postAdd">新增</vxe-button>
               <vxe-button type="reset">重置</vxe-button>
             </template>
           </vxe-form-item>
@@ -104,7 +117,7 @@
 // 筛选 https://vxetable.cn/v3/#/table/base/filter
 // 排序 https://vxetable.cn/v3/#/table/base/sort
 import VXETable from 'vxe-table'
-import XEUtils from 'xe-utils'
+import axios from 'axios'
 
 export default {
   data() {
@@ -117,48 +130,91 @@ export default {
       },
       list: [],
       display: [],
-      filterName1: '',
+      filterName: '',
       submitLoading: false,
-      initialTableData: [
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' },
-        { id: 10001, name: 'JZY', price: '5', detail: '爱你么么哒' }
-      ],
+      result: [],
       selectRow: null,
       showEdit: false,
       formData: {
-        name: '示例',
-        priceL: '0',
-        detail: '示例'
       },
       formRules: {
-        name: [
+        vaccineName: [
           { required: true, message: '请输入名称' }
         ],
-        price: [
+        vaccineQuantity: [
+          { required: true, message: '请输入描述' }
+        ],
+        vaccinePrice: [
           { required: true, message: '请输入价格' }
         ],
-        detail: [
-          { required: true, message: '请输入详情' }
+        vaccineDescription: [
+          { required: true, message: '请输入价格' }
         ]
       }
     }
   },
   created() {
-    this.searchEvent()
+    this.getAll()
   },
   methods: {
+    getAll() {
+      axios({
+        method: 'get',
+        url: 'http://localhost:8084/vaccine/all',
+        timeout: 30000
+        // data: FormDatas
+      }).then(res => {
+        this.result = res.data.data
+        this.tablePage.totalResult = this.result.length
+        this.display = this.result.slice((this.tablePage.currentPage - 1) * this.tablePage.pageSize, this.tablePage.currentPage * this.tablePage.pageSize)
+      })
+    },
+    putUpdate() {
+      const data = this.formData
+      axios({
+        method: 'put',
+        url: 'http://localhost:8084/vaccine/update',
+        timeout: 30000,
+        data
+        // data: FormDatas
+      }).then(res => {
+        this.getAll()
+      })
+    },
+    postAdd() {
+      const data = this.formData
+      axios({
+        method: 'post',
+        url: 'http://localhost:8084/vaccine/add',
+        timeout: 30000,
+        data
+        // data: FormDatas
+      }).then(res => {
+        this.getAll()
+      })
+    },
+    deleteDelete(row) {
+      axios({
+        method: 'delete',
+        url: 'http://localhost:8084/vaccine/delete/' + row.vaccineId,
+        timeout: 30000
+        // data: FormDatas
+      }).then(res => {
+        this.getAll()
+      })
+    },
+    getSearchByName() {
+      axios({
+        method: 'get',
+        url: 'http://localhost:8084/vaccine/searchByName/?vaccineName=' + this.filterName,
+        timeout: 30000
+        // data: FormDatas
+      }).then(res => {
+        this.result = res.data.data
+        this.tablePage.totalResult = this.result.length
+        this.display = this.result.slice((this.tablePage.currentPage - 1) * this.tablePage.pageSize, this.tablePage.currentPage * this.tablePage.pageSize)
+      })
+    },
     visibleMethod({ data }) {
       return data.flag1 === 'Y'
     },
@@ -167,18 +223,22 @@ export default {
     },
     editEvent(row) {
       this.formData = {
-        name: row.name,
-        price: row.price,
-        detail: row.detail
+        vaccineId: row.vaccineId,
+        vaccineName: row.vaccineName,
+        vaccineQuantity: row.vaccineQuantity,
+        vaccinePrice: row.vaccinePrice,
+        vaccineDescription: row.vaccineDescription
       }
       this.selectRow = row
       this.showEdit = true
     },
     insertEvent() {
       this.formData = {
-        name: '',
-        price: '',
-        detail: ''
+        vaccineId: null,
+        vaccineName: null,
+        vaccineQuantity: null,
+        vaccinePrice: null,
+        vaccineDescription: null
       }
       this.selectRow = null
       this.showEdit = true
@@ -186,47 +246,28 @@ export default {
     submitEvent() {
       this.submitLoading = true
       setTimeout(() => {
-        const $table = this.$refs.xTable
         this.submitLoading = false
         this.showEdit = false
         if (this.selectRow) {
           VXETable.modal.message({ content: '保存成功', status: 'success' })
-          Object.assign(this.selectRow, this.formData)
+          // Object.assign(this.selectRow, this.formData)
         } else {
           VXETable.modal.message({ content: '新增成功', status: 'success' })
-          $table.insert(this.formData)
+          // $table.insert(this.formData)
         }
       }, 500)
     },
     async removeEvent(row) {
       const type = await VXETable.modal.confirm('您确定要删除该数据?')
-      const $table = this.$refs.xTable
+      // const $table = this.$refs.xTable
       if (type === 'confirm') {
-        $table.remove(row)
+        // $table.remove(row)
+        this.deleteDelete(row)
       }
     },
     searchEvent() {
-      this.loading = true
-      const filterName = XEUtils.toValueString(this.filterName1).trim().toLowerCase()
-      if (filterName) {
-        const filterRE = new RegExp(filterName, 'gi')
-        const searchProps = ['name', 'detail']
-        const rest = this.initialTableData.filter(item => searchProps.some(key => XEUtils.toValueString(item[key]).toLowerCase().indexOf(filterName) > -1))
-        this.list = rest.map(row => {
-          const item = Object.assign({}, row)
-          searchProps.forEach(key => {
-            item[key] = XEUtils.toValueString(item[key]).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
-          })
-          return item
-        })
-      } else {
-        this.list = this.initialTableData
-      }
-      console.log(1111, this.list)
-      this.loading = false
-      this.tablePage.totalResult = this.list.length
-      this.display = this.list.slice((this.tablePage.currentPage - 1) * this.tablePage.pageSize, this.tablePage.currentPage * this.tablePage.pageSize)
-      console.log(1111, this.display)
+      this.tablePage.totalResult = this.result.length
+      this.display = this.result.slice((this.tablePage.currentPage - 1) * this.tablePage.pageSize, this.tablePage.currentPage * this.tablePage.pageSize)
     },
     handlePageChange({ currentPage, pageSize }) {
       this.tablePage.currentPage = currentPage
@@ -237,9 +278,9 @@ export default {
 }
 </script>
 
-      <style>
-      .keyword-lighten {
-        color: #000;
-        background-color: #FFFF00;
-      }
-      </style>
+<style>
+.keyword-lighten {
+  color: #000;
+  background-color: #FFFF00;
+}
+</style>

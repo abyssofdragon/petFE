@@ -4,7 +4,7 @@
     <vxe-toolbar>
       <template #buttons>
         <vxe-button icon="vxe-icon-square-plus" @click="insertEvent()">新增</vxe-button>
-        <vxe-input v-model="filterName" type="search" placeholder="搜索" @keyup="getDrugSearchByName" />
+        <vxe-input v-model="filterName" type="search" placeholder="搜索" @keyup="getSearchByName" />
       </template>
     </vxe-toolbar>
     <vxe-table
@@ -23,7 +23,7 @@
       <vxe-column field="hospitalizationId" title="ID" type="html" sortable />
       <vxe-column field="patientName" title="名称" type="html" sortable />
       <vxe-column field="roomNumber" title="Room" type="html" sortable />
-      <vxe-column field="hospitalizationPrice" title="价格" type="html" />
+      <vxe-column field="price" title="价格" type="html" />
       <vxe-column title="操作" width="100" show-overflow>
         <template #default="{ row }">
           <vxe-button type="text" icon="vxe-icon-edit" @click="editEvent(row)" />
@@ -81,15 +81,15 @@
               <vxe-input v-model="data.roomNumber" placeholder="请输入房间号" />
             </template>
           </vxe-form-item>
-          <vxe-form-item field="hospitalizationPrice" title="价格" :span="8" :item-render="{}">
+          <vxe-form-item field="price" title="价格" :span="8" :item-render="{}">
             <template #default="{ data }">
-              <vxe-input v-model="data.hospitalizationPrice" placeholder="请输入价格" />
+              <vxe-input v-model="data.price" placeholder="请输入价格" />
             </template>
           </vxe-form-item>
           <vxe-form-item align="center" title-align="left" :span="24">
             <template #default>
-              <vxe-button v-if="selectRow" type="submit" @click="putDrugUpdate">修改</vxe-button>
-              <vxe-button v-else type="submit" @click="postDrugAdd">新增</vxe-button>
+              <vxe-button v-if="selectRow" type="submit" @click="putUpdate">修改</vxe-button>
+              <vxe-button v-else type="submit" @click="postAdd">新增</vxe-button>
               <vxe-button type="reset">重置</vxe-button>
             </template>
           </vxe-form-item>
@@ -126,26 +126,23 @@ export default {
       formData: {
       },
       formRules: {
-        drugName: [
+        patientName: [
           { required: true, message: '请输入名称' }
         ],
-        drugPrice: [
+        roomNumber: [
           { required: true, message: '请输入价格' }
         ],
-        drugQuantity: [
+        price: [
           { required: true, message: '请输入数量' }
         ],
-        drugDescription: [
-          { required: true, message: '请输入详情' }
-        ]
       }
     }
   },
   created() {
-    this.getDrugAll()
+    this.getAll()
   },
   methods: {
-    getDrugAll() {
+    getAll() {
       axios({
         method: 'get',
         url: 'http://localhost:8084/hospitalization/all',
@@ -157,44 +154,44 @@ export default {
         this.display = this.result.slice((this.tablePage.currentPage - 1) * this.tablePage.pageSize, this.tablePage.currentPage * this.tablePage.pageSize)
       })
     },
-    putDrugUpdate() {
+    putUpdate() {
       const data = this.formData
       axios({
         method: 'put',
-        url: 'http://localhost:8084/drug/update',
+        url: 'http://localhost:8084/hospitalization/update',
         timeout: 30000,
         data
         // data: FormDatas
       }).then(res => {
-        this.getDrugAll()
+        this.getAll()
       })
     },
-    postDrugAdd() {
+    postAdd() {
       const data = this.formData
       axios({
         method: 'post',
-        url: 'http://localhost:8084/drug/add',
+        url: 'http://localhost:8084/hospitalization/add',
         timeout: 30000,
         data
         // data: FormDatas
       }).then(res => {
-        this.getDrugAll()
+        this.getAll()
       })
     },
-    deleteDrugDelete(row) {
+    delete(row) {
       axios({
         method: 'delete',
-        url: 'http://localhost:8084/drug/delete/' + row.drugId,
+        url: 'http://localhost:8084/hospitalization/delete/' + row.hospitalizationId,
         timeout: 30000
         // data: FormDatas
       }).then(res => {
-        this.getDrugAll()
+        this.getAll()
       })
     },
-    getDrugSearchByName() {
+    getSearchByName() {
       axios({
         method: 'get',
-        url: 'http://localhost:8084/drug/searchByName/?drugName=' + this.filterName,
+        url: 'http://localhost:8084/hospitalization/searchByName/?patientName=' + this.filterName,
         timeout: 30000
         // data: FormDatas
       }).then(res => {
@@ -214,7 +211,7 @@ export default {
         hospitalizationId: row.hospitalizationId,
         patientName: row.patientName,
         roomNumber: row.roomNumber,
-        hospitalizationPrice: row.hospitalizationPrice
+        price: row.price
       }
       this.selectRow = row
       this.showEdit = true
@@ -224,7 +221,7 @@ export default {
         hospitalizationId: null,
         patientName: null,
         roomNumber: null,
-        hospitalizationPrice: null
+        price: null
       }
       this.selectRow = null
       this.showEdit = true
@@ -248,7 +245,7 @@ export default {
       // const $table = this.$refs.xTable
       if (type === 'confirm') {
         // $table.remove(row)
-        this.deleteDrugDelete(row)
+        this.delete(row)
       }
     },
     searchEvent() {
