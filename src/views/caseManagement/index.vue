@@ -230,10 +230,10 @@
         <el-descriptions-item label="体重">{{ this.mycase.weight }}</el-descriptions-item>
         <el-descriptions-item label="接诊状态" :span="16">
           <div>{{ this.mycase.state }}</div>
-          <div>
+          <div v-for="url in this.files.state.imageUrls" v-bind:key="url.index">
             <el-image
               style="width: 100px; height: 100px"
-              :src="imageurl"
+              :src="url"
               :fit="fit"
             />
           </div>
@@ -244,12 +244,15 @@
             style="margin-left: 120px; display: inline-block"
             multiple
             accept="img/jpg"
+            :auto-upload="false"
+            :on-change="handleChangeS"
             :before-upload="beforeUploadImg"
             :on-exceed="handleExceed"
             :limit="5"
-            :file-list="stateImgList"
+            :file-list="files.state.uploadImgList"
           >
-            <el-button size="small" type="primary">上传图片</el-button>
+            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+            <el-button style="margin-left: 10px;" size="small" type="success" @click="uploadImg('state')">上传到服务器</el-button>
             <div slot="tip" class="el-upload__tip">为接诊状态上传图片</div>
           </el-upload>
           <el-upload
@@ -396,16 +399,40 @@ export default {
       caseSearch: '',
       index: 0,
       fit: 'scale-down',
-      imageList: [],
-      videoList: [],
-      stateImgList: [],
-      stateVdoList: [],
-      diaImgList: [],
-      diaVdoList: [],
-      rstImgList: [],
-      rstVdoList: [],
-      tmtImgList: [],
-      tmtVdoList: [],
+      files: {
+        state: {
+          uploadImgList: [],
+          uploadImgs: [],
+          imageUrls: [],
+          uploadVdoList: [],
+          uploadVdo: [],
+          videoUrls: []
+        },
+        diagnoseProcess: {
+          uploadImgList: [],
+          uploadImgs: [],
+          imageUrls: [],
+          uploadVdoList: [],
+          uploadVdo: [],
+          videoUrls: []
+        },
+        result: {
+          uploadImgList: [],
+          uploadImgs: [],
+          imageUrls: [],
+          uploadVdoList: [],
+          uploadVdo: [],
+          videoUrls: []
+        },
+        treatment: {
+          uploadImgList: [],
+          uploadImgs: [],
+          imageUrls: [],
+          uploadVdoList: [],
+          uploadVdo: [],
+          videoUrls: []
+        }
+      },
       imageurl: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
       videourl: require('../../../public/static/videos/video.mp4'),
       mycase: { patientId: 0, owner: '主人a', address: '翻斗大街', phone: '111', petName: 'aaa', type: 'a', variety: 'aa', age: '11', sex: '公', immunity: '百',
@@ -578,19 +605,44 @@ export default {
       this.showTable = false
       this.showCase = true
       this.mycase = this.caseList.find(x => x.patientId === index)
+      this.getImgS()
     },
-    uploadImgS(item) {
+    getImgS() {
+      axios({
+        method: 'get',
+        url: 'http://localhost:8084/file/getImages',
+        timeout: 30000,
+        params: {
+          patientId: this.mycase.patientId,
+          formType: 'state'
+        }
+      }).then(res => {
+        console.log(res.data)
+        const path = res.data.data.path
+        for (let i = 0; i < path.length; i++) {
+          this.files.state.imageUrls.push(path)
+        }
+      })
+    },
+    uploadImgS() {
       const FormDatas = new FormData()
-      FormDatas.append('image', item.file)
-      console.log(item.file)
-      // axios({
-      //   method: 'post',
-      //   url: '/api/nn/paperScore',
-      //   timeout: 30000,
-      //   data: FormDatas
-      // }).then(res => {
-      //   console.log(res.data)
-      // })
+      for (let i = 0; i < this.files.state.uploadImgs.length; i++) {
+        FormDatas.append('files', this.files.state.uploadImgs[i])
+        console.log(this.files.state.uploadImgs[i])
+      }
+      FormDatas.append('patientId', this.mycase.patientId)
+      FormDatas.append('formType', 'state')
+      axios({
+        method: 'post',
+        url: 'http://localhost:8084/file/uploadMulti',
+        timeout: 30000,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+        data: FormDatas
+      }).then(res => {
+        console.log(res.data)
+      })
     },
     filterType(value, row) {
       return row.type === value
@@ -613,6 +665,16 @@ export default {
     },
     handleExceed(fileList) {
       this.$message.warning('上传文件数量不超过5.')
+    },
+    handleChangeS(file, fileList) {
+      const reader = new FileReader()
+      reader.readAsDataURL(file.raw)
+      reader.onload = (e) => {
+        this.files.state.uploadImgList.push({ name: file.raw.name, url: e.target.result })
+      }
+      // state.form.file.push(file.raw);
+      this.files.state.uploadImgs.push(file.raw)
+      fileList = this.files.state.uploadImgList
     },
     selectCase() {
       this.showCase = false
